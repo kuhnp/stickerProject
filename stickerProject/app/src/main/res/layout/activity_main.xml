@@ -14,7 +14,8 @@
         android:id="@+id/button"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/image_fun"
+        android:src="@drawable/image_fun"
+
 
         />
 
