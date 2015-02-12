@@ -1,15 +1,26 @@
 package com.example.rrhg5930.stickerproject;
 
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    private Uri mImagePath;
+    private Bitmap bmp;
+    ImageView mainImage;
 
     private ActionBar mActionBar;
 
@@ -21,8 +32,36 @@ public class MainActivity extends ActionBarActivity {
         mActionBar.setDisplayHomeAsUpEnabled(false);
 
 
+        mainImage = (ImageView) findViewById(R.id.button);
+
+        mainImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT,null);
+                galleryIntent.setType("image/*");
+                galleryIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                Intent chooser = new Intent(Intent.ACTION_CHOOSER);
+                chooser.putExtra(Intent.EXTRA_INTENT,galleryIntent);
+                chooser.putExtra(Intent.EXTRA_TITLE,"Choose a picture");
+                startActivityForResult(chooser,1);
+            }
+        });
+
+
 
     }
+
+    protected void onActivityResult(int requestCode,int resultCode,Intent result)
+    {
+        if((requestCode == 1) && (resultCode == RESULT_OK))
+        {
+            mImagePath = result.getData();
+            mainImage.setImageURI(mImagePath);
+
+        }
+
+    }
+
 
 
     @Override
