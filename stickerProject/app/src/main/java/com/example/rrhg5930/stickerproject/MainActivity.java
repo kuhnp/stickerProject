@@ -1,13 +1,20 @@
 package com.example.rrhg5930.stickerproject;
 
 
+import android.app.Activity;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,24 +22,27 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.example.rrhg5930.stickerproject.util.StickerUtil;
+
 
 public class MainActivity extends ActionBarActivity {
 
     private Uri mImagePath;
-    private Bitmap bmp;
+    private Uri fileUri;
     ImageView mainImage;
-
-    private ActionBar mActionBar;
+    public StickerApp application;
+    SharedPreferences sharedPref;
+    SharedPreferences.Editor e;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mActionBar = getSupportActionBar();
-        mActionBar.setDisplayHomeAsUpEnabled(false);
-
-
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        e = sharedPref.edit();
         mainImage = (ImageView) findViewById(R.id.button);
+        if(sharedPref.getString("imagePath","")!= "")
+            mainImage.setImageURI(Uri.parse(sharedPref.getString("imagePath","")));
 
         mainImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,10 +50,18 @@ public class MainActivity extends ActionBarActivity {
                 Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT,null);
                 galleryIntent.setType("image/*");
                 galleryIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                fileUri = StickerUtil.getOutputMediaFileUri(StickerUtil.MEDIA_TYPE_IMAGE);
+                //application.setCameraPath(fileUri.getPath());
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,fileUri);
+
                 Intent chooser = new Intent(Intent.ACTION_CHOOSER);
                 chooser.putExtra(Intent.EXTRA_INTENT,galleryIntent);
                 chooser.putExtra(Intent.EXTRA_TITLE,"Choose a picture");
-                startActivityForResult(chooser,1);
+                Intent[] intentArray = {cameraIntent};
+                chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS,intentArray);
+
+                startActivityForResult(chooser, 1);
             }
         });
 
@@ -57,7 +75,15 @@ public class MainActivity extends ActionBarActivity {
         {
             mImagePath = result.getData();
             mainImage.setImageURI(mImagePath);
+            e.putString("imagePath", mImagePath.toString());
+            e.commit();
+            Log.d("path", "path = "+sharedPref.getString("imagePath",""));
 
+            Intent intent = new Intent(this,ExampleAppWidgetProvider.class);
+            intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+            int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(),ExampleAppWidgetProvider.class));
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);
+            sendBroadcast(intent);
         }
 
     }
