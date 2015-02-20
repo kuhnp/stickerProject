@@ -14,13 +14,17 @@ public class StickerApp extends Application{
     private String cameraImagePath;
     SharedPreferences settings;
     SharedPreferences.Editor e;
+    public StickerRest stickerRest;
 
 
 
     public void onCreate()
     {
-        settings = getSharedPreferences(MY_PREFS, Activity.MODE_PRIVATE);
-        e = settings.edit();
+        //settings = getSharedPreferences(MY_PREFS, Activity.MODE_PRIVATE);
+        //e = settings.edit();
+        super.onCreate();
+        stickerRest = StickerRest.getInstance(getApplicationContext());
+
     }
 
     public void setCameraPath(String cameraPath)

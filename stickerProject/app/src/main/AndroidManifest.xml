@@ -9,12 +9,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".StickerApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".FirstScreen"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,14 +24,30 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".ExampleAppWidgetProvider"  android:label="sticker" >
+        <receiver
+            android:name=".ExampleAppWidgetProvider"
+            android:label="sticker" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
-            <meta-data android:name="android.appwidget.provider"
+
+            <meta-data
+                android:name="android.appwidget.provider"
                 android:resource="@xml/appwidget" />
         </receiver>
 
+        <activity
+            android:name=".MainActivity"
+            android:label="MainActivity" >
+        </activity>
+        <activity
+            android:name=".SignInActivity"
+            android:label="@string/title_activity_sign_in" >
+        </activity>
+        <activity
+            android:name=".SignUpActivity"
+            android:label="@string/title_activity_sign_up" >
+        </activity>
     </application>
 
 </manifest>

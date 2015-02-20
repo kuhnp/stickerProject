@@ -4,5 +4,9 @@
     <string name="app_name">stickerProject</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_first_screen">FirstScreen</string>
+    <string name="title_activity_sign_in_acivity">SignInAcivity</string>
+    <string name="title_activity_sign_in">SignInActivity</string>
+    <string name="title_activity_sign_up">SignUpActivity</string>
 
 </resources>
