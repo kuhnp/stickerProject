@@ -1,5 +1,6 @@
 package com.example.rrhg5930.stickerproject;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -8,6 +9,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import org.json.JSONObject;
+
 import java.net.URL;
 
 
@@ -45,6 +49,12 @@ public class SignUpActivity extends ActionBarActivity {
     }
 
 
+    public void goToMainActivity(){
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -76,15 +86,15 @@ public class SignUpActivity extends ActionBarActivity {
         @Override
         protected Long doInBackground(URL... arg0) {
 
-        application.stickerRest.signUp(email,pw);
-
+        JSONObject aaa = application.stickerRest.signUp(email,pw);
+        int b = 3;
 
             return null;
         }
 
         @Override
         protected void onPostExecute(Long result) {
-
+        goToMainActivity();
         }
     }
 }

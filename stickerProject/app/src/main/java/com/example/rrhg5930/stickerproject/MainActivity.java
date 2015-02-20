@@ -42,7 +42,7 @@ public class MainActivity extends ActionBarActivity {
     SharedPreferences.Editor e;
     Button button;
     ImageLoader imLoader = ImageLoader.getInstance();
-    public String url_temp = "http://10.0.1.56:8080/api/files";
+    public String url_temp = "http://10.0.1.69:8080/api/files";
 
 
     @Override
