@@ -2,6 +2,7 @@ package com.example.rrhg5930.stickerproject;
 
 
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
@@ -19,10 +21,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.example.rrhg5930.stickerproject.util.StickerUtil;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
+import java.io.File;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -33,16 +40,30 @@ public class MainActivity extends ActionBarActivity {
     public StickerApp application;
     SharedPreferences sharedPref;
     SharedPreferences.Editor e;
+    Button button;
+    ImageLoader imLoader = ImageLoader.getInstance();
+    public String url_temp = "http://10.0.1.56:8080/api/files";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        imLoader.init(ImageLoaderConfiguration.createDefault(getApplicationContext()));
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         e = sharedPref.edit();
         mainImage = (ImageView) findViewById(R.id.button);
+
+        // check how many widget have been installed on the home screen
+        AppWidgetManager mAppWidgetManager= AppWidgetManager.getInstance(getApplicationContext());
+        ComponentName thisWidget = new ComponentName(getApplicationContext(), ExampleAppWidgetProvider.class);
+        int[] allWidgetIds2 = mAppWidgetManager.getAppWidgetIds(thisWidget);
+
+        // keep the default image if it has not been already set
         if(sharedPref.getString("imagePath","")!= "")
             mainImage.setImageURI(Uri.parse(sharedPref.getString("imagePath","")));
+
+
 
         mainImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +86,20 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+        button = (Button) findViewById(R.id.button2);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //display the image from the url
+        imLoader.displayImage(url_temp,mainImage);
 
+        //save the image from url
+        downloadFile(url_temp);
+
+
+
+            }
+        });
 
     }
 
@@ -88,7 +122,29 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    public void downloadFile(String uRl) {
+        File direct = new File(Environment.getExternalStorageDirectory()
+                + "/AnhsirkDasarp");
 
+        if (!direct.exists()) {
+            direct.mkdirs();
+        }
+
+        DownloadManager mgr = (DownloadManager) getApplicationContext().getSystemService(Context.DOWNLOAD_SERVICE);
+
+        Uri downloadUri = Uri.parse(uRl);
+        DownloadManager.Request request = new DownloadManager.Request(
+                downloadUri);
+
+        request.setAllowedNetworkTypes(
+                DownloadManager.Request.NETWORK_WIFI)
+                .setAllowedOverRoaming(false).setTitle("Demo")
+                .setDescription("Something useful. No, really.")
+                .setDestinationInExternalPublicDir("/AnhsirkDasarpFiles", "fileName.jpg");
+
+        mgr.enqueue(request);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
