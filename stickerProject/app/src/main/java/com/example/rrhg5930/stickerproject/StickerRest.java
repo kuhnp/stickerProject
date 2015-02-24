@@ -88,7 +88,44 @@ public class StickerRest {
 
     public JSONObject signUp(String email,String pw){
 
-        String url = "http://10.0.1.69:8080/signup";
+        String url = "http://10.0.1.77:8080/signup";
+        JSONObject jsonObject = new JSONObject();
+        HttpClient httpClient = getSpecialClient();
+        HttpContext localContext = new BasicHttpContext();
+        HttpPost httpPost = new HttpPost(url);
+        try {
+            jsonObject.put("email", email);
+            jsonObject.put("password",pw);
+            StringEntity se = new StringEntity(jsonObject.toString(), "UTF-8");
+            httpPost.setHeader("Content-type","application/json");
+            httpPost.setEntity(se);
+            HttpResponse httpResponse = httpClient.execute(httpPost,localContext);
+            return parseAnswer(httpResponse);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+
+    }
+
+
+    public JSONObject signIn(String email,String pw){
+
+        String url = "http://10.0.1.77:8080/login";
         JSONObject jsonObject = new JSONObject();
         HttpClient httpClient = getSpecialClient();
         HttpContext localContext = new BasicHttpContext();
