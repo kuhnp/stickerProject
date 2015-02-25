@@ -1,5 +1,6 @@
 // app/routes.js
 var User            = require('../app/models/user');
+var Friend          = require('../app/models/friend');
 var jwt        = require("../node_modules/jsonwebtoken");
 
 module.exports = function(app, passport) {
@@ -68,6 +69,9 @@ module.exports = function(app, passport) {
                         console.log('Creating new user token...');
                         newUser.save(function(err,user){
                         user.token = jwt.sign(newUser, process.env.JWT_SECRET);
+                        var decode = jwt.verify(user.token,process.env.JWT_SECRET);
+                        console.log('decode.email = '+decode.email);
+
                         console.log('Done');
                         user.save(function(err,user1){
                             res.json({ 
@@ -157,14 +161,105 @@ module.exports = function(app, passport) {
 });
 
 
+app.post('/friend',ensureAuthorized,function(req, res) {
+    var decode = jwt.verify(req.token,process.env.JWT_SECRET);
+    var username = decode.username;
+
+    User.findOne({'username':req.body.friend}, function(err,user){
+        if(err){
+            res.json({
+                type: false,
+                errorCode: 0
+            });
+        }
+        else{
+            if(user){
+                console.log("Friend found");
+                Friend.findOne(
+                {
+                    $or:   
+                    [
+                        {'user1':req.body.friend, 'user2':username},
+                        {'user2':req.body.friend, 'user1':username}
+                    ]
+
+                }, function (err,friend){
+                        console.log("Friend found2");
+                        if(friend){
+                            res.json({
+                            type: false,
+                            errorCode: 4,
+                            message: "Already friend with"
+                            });   
+                        }
+                        else{
+                            console.log("Friend found3");
+                            var newFriend = new Friend();
+                            newFriend.user1 = username;
+                            newFriend.user2 = req.body.friend;
+                            newFriend.save(function(err,friend2){
+                                res.json({
+                                type: true,
+                                message: "New friendship"
+                                });
+                            });
+                        }
+                });
+            }
+            else {
+                res.json({
+                type: false,
+                errorCode: 3,
+                data: "User does not exist"
+                });
+            }
+        }
+    });
+});
+
+
+
+
+app.get('/friend', ensureAuthorized, function(req,res){     //get all the friends
+    var decode = jwt.verify(req.token,process.env.JWT_SECRET);
+    var username = decode.username;
+    console.log(username);
+    var i = 0;
+    var jsonObj = JSON.parse('{"type": true, "friendNum":0, "friends": []}');;
+    console.log('before cursor');
+
+    Friend.find({},function(err,friends){
+        if(err){
+            res.json({
+                type: false,
+                errorCode: 0
+            });
+        }
+        else{  friends.forEach(function(frien){
+                if(frien.user1 == username){
+                    jsonObj.friends[i] = JSON.parse('{"username":"'+frien.user2+'"}');
+                    i++;
+                }
+                else if(frien.user2 == username){
+                    console.log(frien);
+                    jsonObj.friends[i] = JSON.parse('{"username":"'+frien.user1+'"}');
+                    i++;
+                }
+            });
+            var friendNumber = i;
+            jsonObj.friendNum = JSON.parse(friendNumber);
+            console.log(jsonObj.friends[0].username);
+            res.json(jsonObj);
+        }
+    });
+});
 
 function ensureAuthorized(req, res, next) {
     console.log('Entered in authorized function');
     var bearerToken;    
     var bearerHeader = req.headers["token"];
     if (typeof bearerHeader !== 'undefined') {
-        var bearer = bearerHeader.split(" ");
-        req.token = bearer;
+        req.token = bearerHeader;
         next();
     } else {
         res.send(403);
@@ -183,3 +278,8 @@ function isLoggedIn(req, res, next) {
     // if they aren't redirect them to the home page
     res.redirect('/');
 }
+
+
+
+
+//find({$or:[{'user1':piero},{'user2':piero}]})
