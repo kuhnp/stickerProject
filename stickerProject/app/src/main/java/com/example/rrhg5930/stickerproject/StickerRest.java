@@ -86,9 +86,9 @@ public class StickerRest {
         }
 
 
-    public JSONObject signUp(String email,String pw){
+    public JSONObject signUp(String email,String pw, String username){
 
-        String url = "http://10.0.1.77:8080/signup";
+        String url = "http://10.0.1.88:8080/signup";
         JSONObject jsonObject = new JSONObject();
         HttpClient httpClient = getSpecialClient();
         HttpContext localContext = new BasicHttpContext();
@@ -96,6 +96,7 @@ public class StickerRest {
         try {
             jsonObject.put("email", email);
             jsonObject.put("password",pw);
+            jsonObject.put("username", username);
             StringEntity se = new StringEntity(jsonObject.toString(), "UTF-8");
             httpPost.setHeader("Content-type","application/json");
             httpPost.setEntity(se);

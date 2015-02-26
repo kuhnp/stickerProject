@@ -27,15 +27,17 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Enter password"
         android:id="@+id/pwText2"
-        android:layout_centerVertical="true"
+
+        android:layout_below="@+id/editText3"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="38dp" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/editText3"
-        android:layout_marginTop="61dp"
+        android:layout_marginTop="15dp"
         android:layout_below="@+id/emailText2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -51,7 +53,7 @@
         android:layout_below="@+id/pwText2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="77dp" />
+        android:layout_marginTop="15dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -60,6 +62,30 @@
         android:id="@+id/button5"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Username"
+        android:id="@+id/textView4"
+        android:layout_marginTop="41dp"
+        android:layout_below="@+id/editText4"
+        android:layout_alignRight="@+id/emailText2"
+        android:layout_alignEnd="@+id/emailText2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText5"
+        android:layout_below="@+id/textView4"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="30dp"
+        android:layout_alignRight="@+id/pwText2"
+        android:layout_alignEnd="@+id/pwText2" />
 
 
 </RelativeLayout>
