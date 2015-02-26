@@ -1,7 +1,9 @@
 // app/routes.js
 var User            = require('../app/models/user');
 var Friend          = require('../app/models/friend');
-var jwt        = require("../node_modules/jsonwebtoken");
+var jwt             = require("../node_modules/jsonwebtoken");
+var multer          = require('../node_modules/multer');
+var randomstring = require("randomstring");
 
 module.exports = function(app, passport) {
 
@@ -254,6 +256,36 @@ app.get('/friend', ensureAuthorized, function(req,res){     //get all the friend
     });
 });
 
+
+
+app.post('/sticker', ensureAuthorized, multer({dest: './uploads/', rename: function (fieldname, filename) {
+    return filename.replace(/\W+/g, '-').toLowerCase();
+  }}), function(req,res){
+    var decode = jwt.verify(req.token,process.env.JWT_SECRET);
+    var dest = req.body.dest;
+    var username = decode.username;
+    
+    var imagePath =  "/Users/pierre/Documents/Git/stickerProject/Backend/uploads/"+dest+".JPG";
+
+    res.json({
+                type:true,
+                url: imagePath
+            });
+
+});
+
+
+app.get('/sticker', ensureAuthorized,function(req,res){
+    var decode = jwt.verify(req.token,process.env.JWT_SECRET);
+    var username = decode.username;
+
+    res.json({
+                message:true,
+                imageUrl: "/Users/pierre/Documents/Git/stickerProject/Backend/uploads/"+username+".JPG"
+            });
+
+});
+
 function ensureAuthorized(req, res, next) {
     console.log('Entered in authorized function');
     var bearerToken;    
@@ -267,6 +299,10 @@ function ensureAuthorized(req, res, next) {
 }
 
 };
+
+function getExtension(fn) {
+    return fn.split('.').pop();
+}
 
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
