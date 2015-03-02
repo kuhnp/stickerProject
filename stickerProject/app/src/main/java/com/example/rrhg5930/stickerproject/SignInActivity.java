@@ -1,7 +1,9 @@
 package com.example.rrhg5930.stickerproject;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,7 +11,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URL;
@@ -22,7 +26,10 @@ public class SignInActivity extends ActionBarActivity {
     EditText emailEditText;
     String email;
     String pw;
+    int err = 0;
     private StickerApp application;
+    SharedPreferences sharedPref;
+    SharedPreferences.Editor e;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +39,8 @@ public class SignInActivity extends ActionBarActivity {
         bSend = (Button)findViewById(R.id.button6);
         pwEditText = (EditText) findViewById(R.id.editText2);
         emailEditText = (EditText) findViewById(R.id.editText);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        e = sharedPref.edit();
 
         bSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,15 +90,37 @@ public class SignInActivity extends ActionBarActivity {
         @Override
         protected Long doInBackground(URL... arg0) {
 
-            JSONObject aaa = application.stickerRest.signIn(email, pw);
-            int b = 3;
+            JSONObject response = application.stickerRest.signIn(email, pw);
+            try {
+                if(response.getString("type") == "true"){
+                    String token = response.getString("token");
+                    if(token == null)
+                        err =1;
+                    else{
+                        e.putString("token", token.toString());
+                        e.commit();
+
+                        err = 0;}
+                }
+                else{
+                    err = 1;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
             return null;
         }
 
         @Override
         protected void onPostExecute(Long result) {
-            goToMainActivity();
+
+            if(err == 0)
+                goToMainActivity();
+            else{
+                Toast toast = Toast.makeText(getApplicationContext(),"Error when login...",Toast.LENGTH_LONG);
+                toast.show();
+            }
         }
     }
 

@@ -2,6 +2,8 @@
 <resources>
 
     <color name="main_color">#66C38F</color>
+    <color name="main_background">#4c01dfff</color>
+    <color name="behind_image">#ff696767</color>
 
 
 </resources>
