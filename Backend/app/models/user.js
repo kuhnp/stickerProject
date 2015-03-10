@@ -12,7 +12,8 @@ var userSchema = mongoose.Schema({
         email           : String,
         password        : String,
         token           : String,
-        imageUrl        : String
+        imageUrl        : String,
+        regId			: String,
 });
 
 // methods ======================

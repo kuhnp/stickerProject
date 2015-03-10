@@ -1,7 +1,6 @@
 package com.example.rrhg5930.stickerproject;
 
 
-import android.app.Activity;
 import android.app.DownloadManager;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -10,29 +9,52 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.example.rrhg5930.stickerproject.util.StickerUtil;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    private static String TAG = "Main activity";
+
+    /*************   GCM   **************/
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    GoogleCloudMessaging gcm;
+    String regid;
+    String SENDER_ID = "394358907247";
 
     private Uri mImagePath;
     private Uri fileUri;
@@ -41,18 +63,48 @@ public class MainActivity extends ActionBarActivity {
     SharedPreferences sharedPref;
     SharedPreferences.Editor e;
     Button button;
-    ImageLoader imLoader = ImageLoader.getInstance();
-    public String url_temp = "http://10.0.1.69:8080/api/files";
+    Button bFriend;
+    ImageLoader imLoader;
+    public String url_temp = "http://10.0.1.60:8080/sticker";
+
+    // friend Activity
+    ArrayList<String> friendList;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        imLoader.init(ImageLoaderConfiguration.createDefault(getApplicationContext()));
+
+        application = (StickerApp) getApplicationContext();
+        //imLoader.init(ImageLoaderConfiguration.createDefault(getApplicationContext()));
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         e = sharedPref.edit();
         mainImage = (ImageView) findViewById(R.id.button);
+        bFriend = (Button) findViewById(R.id.bFriend);
+
+        StickerUtil.createMediaDirectory();
+
+        bFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GetFriendTask task = new GetFriendTask();
+                task.execute();
+
+            }
+        });
+
+        if(checkPlayServices()){
+            gcm = GoogleCloudMessaging.getInstance(this);
+            regid = application.getRegistrationId(getApplicationContext());
+            if (regid.isEmpty()){
+                registerInBackground();
+            }
+        }
+        else {
+            Log.d(TAG, "No valid Google Play Services APK found.");
+        }
+
 
         // check how many widget have been installed on the home screen
         AppWidgetManager mAppWidgetManager= AppWidgetManager.getInstance(getApplicationContext());
@@ -90,11 +142,17 @@ public class MainActivity extends ActionBarActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Map<String, String> headers = new HashMap<String, String>();
+                headers.put("token",sharedPref.getString("token",""));
+                application.setupImageLoader(headers);
+                imLoader = ImageLoader.getInstance();
                 //display the image from the url
-        imLoader.displayImage(url_temp,mainImage);
+                imLoader.displayImage(url_temp,mainImage);
+
 
         //save the image from url
-        downloadFile(url_temp);
+        //downloadFile(url_temp);
 
 
 
@@ -122,19 +180,19 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    public void downloadFile(String uRl) {
-        File direct = new File(Environment.getExternalStorageDirectory()
-                + "/AnhsirkDasarp");
+        public void downloadFile(String uRl) {
+            File direct = new File(Environment.getExternalStorageDirectory()
+                    + "/AnhsirkDasarp");
 
-        if (!direct.exists()) {
-            direct.mkdirs();
-        }
+            if (!direct.exists()) {
+                direct.mkdirs();
+            }
 
-        DownloadManager mgr = (DownloadManager) getApplicationContext().getSystemService(Context.DOWNLOAD_SERVICE);
+            DownloadManager mgr = (DownloadManager) getApplicationContext().getSystemService(Context.DOWNLOAD_SERVICE);
 
-        Uri downloadUri = Uri.parse(uRl);
-        DownloadManager.Request request = new DownloadManager.Request(
-                downloadUri);
+            Uri downloadUri = Uri.parse(uRl);
+            DownloadManager.Request request = new DownloadManager.Request(
+                    downloadUri);
 
         request.setAllowedNetworkTypes(
                 DownloadManager.Request.NETWORK_WIFI)
@@ -167,5 +225,112 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public class GetFriendTask extends AsyncTask<URL, Integer, Long> {
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Long doInBackground(URL... arg0) {
+
+            JSONObject response = application.stickerRest.getFriends(sharedPref.getString("token",""));
+            if (response!=null) {
+                JSONArray friendArray = null;
+                JSONObject friend = null;
+                friendList = new ArrayList<String>();
+                try {
+                    friendArray = response.getJSONArray("friends");
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
+                Log.d("FriendActivity","lenght"+friendArray.length());
+                for (int i = 0; i < friendArray.length(); i++) {
+
+                    try {
+                        friend = friendArray.getJSONObject(i);
+                    } catch (JSONException e1) {
+                        e1.printStackTrace();
+                    }
+                    try {
+                        String username = friend.getString("username");
+                        friendList.add(username);
+                        Log.d("FriendActivity", "username = " + username);
+                    } catch (JSONException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+            else{
+                Log.d("FriendActivity", "Null friends");
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Long result) {
+
+            goToFriendActivity(friendList);
+        }
+    }
+
+
+
+
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
+
+
+
+
+    public void goToFriendActivity(ArrayList friendList) {
+        Intent intent = new Intent(this, FriendActivity.class);
+        intent.putStringArrayListExtra("friendList", friendList);
+        startActivity(intent);
+        finish();
+    }
+
+
+    private void registerInBackground() {
+        new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object... params) {
+                String msg = "";
+                try {
+                    if (gcm == null) {
+                        gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
+                    }
+                    Log.d(TAG,"Registration in progress...");
+                    regid = gcm.register(SENDER_ID);
+                    msg = "Device registered, registration ID=" + regid;
+
+                    Log.d(TAG,"Registration id = "+regid);
+
+                    application.stickerRest.sendRegistrationIdToBackend(regid,sharedPref.getString("token",""));
+
+
+                    application.storeRegistrationId(getApplicationContext(), regid);
+                } catch (IOException ex) {
+                    msg = "Error :" + ex.getMessage();
+                }
+                return msg;
+            }
+        }.execute();
+
     }
 }

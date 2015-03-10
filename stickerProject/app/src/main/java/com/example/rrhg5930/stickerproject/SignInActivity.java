@@ -6,12 +6,16 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,6 +24,13 @@ import java.net.URL;
 
 
 public class SignInActivity extends ActionBarActivity {
+
+    private static String TAG = "Sign IN activity";
+
+
+    /*************   GCM   **************/
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
 
     Button bSend;
     EditText pwEditText;
@@ -30,6 +41,7 @@ public class SignInActivity extends ActionBarActivity {
     private StickerApp application;
     SharedPreferences sharedPref;
     SharedPreferences.Editor e;
+    Button signUpB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +52,7 @@ public class SignInActivity extends ActionBarActivity {
         pwEditText = (EditText) findViewById(R.id.editText2);
         emailEditText = (EditText) findViewById(R.id.editText);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        signUpB = (Button) findViewById(R.id.signupB);
         e = sharedPref.edit();
 
         bSend.setOnClickListener(new View.OnClickListener() {
@@ -54,6 +67,12 @@ public class SignInActivity extends ActionBarActivity {
             }
         });
 
+        signUpB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToSignUpActivity();
+            }
+        });
 
     }
 
@@ -93,12 +112,14 @@ public class SignInActivity extends ActionBarActivity {
             JSONObject response = application.stickerRest.signIn(email, pw);
             try {
                 if(response.getString("type") == "true"){
+                    StickerApp.mainUsername = email;
                     String token = response.getString("token");
                     if(token == null)
                         err =1;
                     else{
                         e.putString("token", token.toString());
                         e.commit();
+                        Log.d("SignIn", "token = " + token);
 
                         err = 0;}
                 }
@@ -129,5 +150,33 @@ public class SignInActivity extends ActionBarActivity {
             startActivity(intent);
             finish();
         }
+
+
+    public void goToSignUpActivity() {
+        Intent intent = new Intent(this, SignUpActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+
+    /**
+     * Check the device to make sure it has the Google Play Services APK. If
+     * it doesn't, display a dialog that allows users to download the APK from
+     * the Google Play Store or enable it in the device's system settings.
+     */
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
 
 }

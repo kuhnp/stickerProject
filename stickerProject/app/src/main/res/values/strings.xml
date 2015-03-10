@@ -8,5 +8,6 @@
     <string name="title_activity_sign_in_acivity">SignInAcivity</string>
     <string name="title_activity_sign_in">SignInActivity</string>
     <string name="title_activity_sign_up">SignUpActivity</string>
+    <string name="title_activity_friend">FriendActivity</string>
 
 </resources>

@@ -3,7 +3,8 @@ var User            = require('../app/models/user');
 var Friend          = require('../app/models/friend');
 var jwt             = require("../node_modules/jsonwebtoken");
 var multer          = require('../node_modules/multer');
-var randomstring = require("randomstring");
+var randomstring    = require("randomstring");
+var gcm             = require('node-gcm');
 
 module.exports = function(app, passport) {
 
@@ -65,8 +66,8 @@ module.exports = function(app, passport) {
                         var newUser = new User();
                         newUser.email = req.body.email;
                         newUser.password = newUser.generateHash(req.body.password);
-                        newUser.firstname = req.body.firstname;
-                        newUser.lastname = req.body.lastname;
+                        //newUser.firstname = req.body.firstname;
+                        //newUser.lastname = req.body.lastname;
                         newUser.username = req.body.username;
                         console.log('Creating new user token...');
                         newUser.save(function(err,user){
@@ -188,10 +189,12 @@ app.post('/friend',ensureAuthorized,function(req, res) {
                 }, function (err,friend){
                         console.log("Friend found2");
                         if(friend){
+                            console.log("Error Already friend with");
                             res.json({
                             type: false,
                             errorCode: 4,
                             message: "Already friend with"
+                            
                             });   
                         }
                         else{
@@ -209,6 +212,7 @@ app.post('/friend',ensureAuthorized,function(req, res) {
                 });
             }
             else {
+                console.log("Error User does not exist");
                 res.json({
                 type: false,
                 errorCode: 3,
@@ -239,18 +243,18 @@ app.get('/friend', ensureAuthorized, function(req,res){     //get all the friend
         }
         else{  friends.forEach(function(frien){
                 if(frien.user1 == username){
+                    console.log("Friend with "+frien.user2);
                     jsonObj.friends[i] = JSON.parse('{"username":"'+frien.user2+'"}');
                     i++;
                 }
                 else if(frien.user2 == username){
-                    console.log(frien);
+                    console.log("Friend with "+frien.user1);
                     jsonObj.friends[i] = JSON.parse('{"username":"'+frien.user1+'"}');
                     i++;
                 }
             });
             var friendNumber = i;
             jsonObj.friendNum = JSON.parse(friendNumber);
-            console.log(jsonObj.friends[0].username);
             res.json(jsonObj);
         }
     });
@@ -262,29 +266,95 @@ app.post('/sticker', ensureAuthorized, multer({dest: './uploads/', rename: funct
     return filename.replace(/\W+/g, '-').toLowerCase();
   }}), function(req,res){
     var decode = jwt.verify(req.token,process.env.JWT_SECRET);
-    var dest = req.body.dest;
+    var dest = req.headers["dest"];
     var username = decode.username;
-    
-    var imagePath =  "/Users/pierre/Documents/Git/stickerProject/Backend/uploads/"+dest+".JPG";
 
-    res.json({
-                type:true,
-                url: imagePath
+    var message = new gcm.Message();
+    message.addData('key1', 'salut');
+    var regIds ;
+
+    console.log('post sticker to '+dest+' , before search function');
+    User.findOne({'username': dest }, function(err,usr){
+        if (err) {
+            res.json({
+                type: false,
+                data: "Error occured: " + err,
+                errorCode : 0
             });
+        }
+        else {
+            if(usr){
+                regIds = usr.regId;
+                console.log('Dest is found, regId = '+regIds);
+                var sender = new gcm.Sender('AIzaSyBcIOaGWw8bB6nobeCf5fr3lL9YIO0Tg1M');
+                sender.send(message, regIds, function (err, result) {
+                if(err) 
+                    console.log('error occured when sending');
+                else    
+                    console.log(result);
+                });
+                res.json({
+                    type:true,
+                });
+            }
+            else{
+                console.log('User not registered');
+                res.json({
+                    type: false,
+                    data: "User not found"
+                });
+            }
+        }    
 
+    });
 });
 
 
 app.get('/sticker', ensureAuthorized,function(req,res){
+    console.log('sticker request received');
     var decode = jwt.verify(req.token,process.env.JWT_SECRET);
     var username = decode.username;
+    console.log('sticker request for '+username);
 
-    res.json({
-                message:true,
-                imageUrl: "/Users/pierre/Documents/Git/stickerProject/Backend/uploads/"+username+".JPG"
-            });
+    res.sendfile('/Users/pierre/Documents/Git/stickerProject/Backend/uploads/'+username+'.jpg');
 
 });
+
+
+app.post('/notificationId', ensureAuthorized,function(req,res){
+    console.log('received new registration id');
+    var decode = jwt.verify(req.token,process.env.JWT_SECRET);
+    var username = decode.username;
+    User.findOne({'username': username},function(err,user){
+        if (err) {
+            res.json({
+                type: false,
+                data: "Error occured: " + err,
+                errorCode : 0
+            });
+        }
+        else {
+            if(user){
+                user.regId = req.body.registration_id;
+                console.log('user:'+user.username+' is now registered with registration id:'+req.body.registration_id);
+                user.save(function(err,usr){
+                    res.json({
+                        type: true,
+                        data: 'regId saved in the database'
+                    });
+                });
+            }
+            else {
+                console.log('User not registered');
+                res.json({
+                    type: false,
+                    data: "User not found"
+                });    
+            }
+        }
+    });
+});
+
 
 function ensureAuthorized(req, res, next) {
     console.log('Entered in authorized function');
