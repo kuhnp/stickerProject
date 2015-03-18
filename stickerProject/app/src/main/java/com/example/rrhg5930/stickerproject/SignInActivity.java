@@ -34,8 +34,8 @@ public class SignInActivity extends ActionBarActivity {
 
     Button bSend;
     EditText pwEditText;
-    EditText emailEditText;
-    String email;
+    EditText usernameEditText;
+    String username;
     String pw;
     int err = 0;
     private StickerApp application;
@@ -48,9 +48,9 @@ public class SignInActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         application = (StickerApp) getApplicationContext();
-        bSend = (Button)findViewById(R.id.button6);
-        pwEditText = (EditText) findViewById(R.id.editText2);
-        emailEditText = (EditText) findViewById(R.id.editText);
+        bSend = (Button)findViewById(R.id.loginB);
+        pwEditText = (EditText) findViewById(R.id.pwdET);
+        usernameEditText = (EditText) findViewById(R.id.usernameET);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         signUpB = (Button) findViewById(R.id.signupB);
         e = sharedPref.edit();
@@ -58,7 +58,7 @@ public class SignInActivity extends ActionBarActivity {
         bSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                email = emailEditText.getText().toString();
+                username = usernameEditText.getText().toString();
                 pw = pwEditText.getText().toString();
                 SignInTask task = new SignInTask();
                 task.execute();
@@ -109,15 +109,16 @@ public class SignInActivity extends ActionBarActivity {
         @Override
         protected Long doInBackground(URL... arg0) {
 
-            JSONObject response = application.stickerRest.signIn(email, pw);
+            JSONObject response = application.stickerRest.signIn(username, pw);
             try {
                 if(response.getString("type") == "true"){
-                    StickerApp.mainUsername = email;
                     String token = response.getString("token");
                     if(token == null)
                         err =1;
                     else{
                         e.putString("token", token.toString());
+                        e.putString("username", username);
+                        e.putBoolean("isLoggedIn",true);
                         e.commit();
                         Log.d("SignIn", "token = " + token);
 

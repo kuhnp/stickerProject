@@ -30,9 +30,6 @@ module.exports = function(app, passport) {
     // SIGNUP ==============================
     // =====================================
 
-    // process the signup form
-    // app.post('/signup', do all our passport stuff here);
-
     app.post('/signup', function(req, res) {
         User.findOne({'email': req.body.email}, function(err, user) {
             if (err) {
@@ -168,6 +165,9 @@ app.post('/friend',ensureAuthorized,function(req, res) {
     var decode = jwt.verify(req.token,process.env.JWT_SECRET);
     var username = decode.username;
 
+    
+
+
     User.findOne({'username':req.body.friend}, function(err,user){
         if(err){
             res.json({
@@ -177,7 +177,6 @@ app.post('/friend',ensureAuthorized,function(req, res) {
         }
         else{
             if(user){
-                console.log("Friend found");
                 Friend.findOne(
                 {
                     $or:   
@@ -187,7 +186,6 @@ app.post('/friend',ensureAuthorized,function(req, res) {
                     ]
 
                 }, function (err,friend){
-                        console.log("Friend found2");
                         if(friend){
                             console.log("Error Already friend with");
                             res.json({
@@ -198,10 +196,35 @@ app.post('/friend',ensureAuthorized,function(req, res) {
                             });   
                         }
                         else{
-                            console.log("Friend found3");
+                            console.log("Friend found");
                             var newFriend = new Friend();
                             newFriend.user1 = username;
                             newFriend.user2 = req.body.friend;
+                            newFriend.isFriend = 'false';
+
+                        
+                            var message = new gcm.Message();
+                            var sender = new gcm.Sender('');
+                            message.addData({
+                                messageType: 'friendRequest',
+                                senderUsername: username
+                                //from: req.body.friend
+                            });
+
+                            //message.addData('from', 'salut');
+                            console.log(req.body.friend);
+                            //message.addData('from',req.body.friend);
+                            var regId = user.regId;
+                            console.log('before sending, regId = '+regId);
+                            
+                            sender.send(message, regId, function (err, result) {
+                                if(err) 
+                                    console.log('error occured when sending');
+                                else    
+                                    console.log('message sent to '+req.body.friend);
+                            });
+
+
                             newFriend.save(function(err,friend2){
                                 res.json({
                                 type: true,
@@ -225,6 +248,34 @@ app.post('/friend',ensureAuthorized,function(req, res) {
 
 
 
+app.post('/friendaccept', ensureAuthorized, function(req,res){
+    console.log('Accept request');
+    var decode = jwt.verify(req.token,process.env.JWT_SECRET);
+    var username = decode.username;
+    Friend.findOne(
+    {
+                    $or:   
+                    [
+                        {'user1':req.body.friend, 'user2':username},
+                        {'user2':req.body.friend, 'user1':username}
+                    ]
+
+    }, function(err,friend){
+        if(friend){
+            friend.isFriend = 'true';
+            friend.save(function(err,res){
+                res.json({
+                type: true
+                });
+            });
+        }
+    });
+});
+
+
+
+
+
 
 app.get('/friend', ensureAuthorized, function(req,res){     //get all the friends
     var decode = jwt.verify(req.token,process.env.JWT_SECRET);
@@ -242,16 +293,19 @@ app.get('/friend', ensureAuthorized, function(req,res){     //get all the friend
             });
         }
         else{  friends.forEach(function(frien){
-                if(frien.user1 == username){
-                    console.log("Friend with "+frien.user2);
-                    jsonObj.friends[i] = JSON.parse('{"username":"'+frien.user2+'"}');
-                    i++;
-                }
-                else if(frien.user2 == username){
-                    console.log("Friend with "+frien.user1);
-                    jsonObj.friends[i] = JSON.parse('{"username":"'+frien.user1+'"}');
-                    i++;
-                }
+
+                   
+                    if(frien.user1 == username){
+                        console.log("Friend with "+frien.user2);
+                        jsonObj.friends[i] = JSON.parse('{"username":"'+frien.user2+'", "isFriend":"'+frien.isFriend+'", "fromUser":"true"}');
+                        i++;
+                    }
+                    else if(frien.user2 == username){
+                        console.log("Friend with "+frien.user1);
+                        jsonObj.friends[i] = JSON.parse('{"username":"'+frien.user1+'", "isFriend":"'+frien.isFriend+'", "fromUser":"false"}');
+                        i++;
+                    }
+                    
             });
             var friendNumber = i;
             jsonObj.friendNum = JSON.parse(friendNumber);
@@ -270,7 +324,8 @@ app.post('/sticker', ensureAuthorized, multer({dest: './uploads/', rename: funct
     var username = decode.username;
 
     var message = new gcm.Message();
-    message.addData('key1', 'salut');
+    message.addData('MessageType', 'postSticker');
+    message.addData('from',username);
     var regIds ;
 
     console.log('post sticker to '+dest+' , before search function');
@@ -286,7 +341,7 @@ app.post('/sticker', ensureAuthorized, multer({dest: './uploads/', rename: funct
             if(usr){
                 regIds = usr.regId;
                 console.log('Dest is found, regId = '+regIds);
-                var sender = new gcm.Sender('AIzaSyBcIOaGWw8bB6nobeCf5fr3lL9YIO0Tg1M');
+                var sender = new gcm.Sender('');
                 sender.send(message, regIds, function (err, result) {
                 if(err) 
                     console.log('error occured when sending');

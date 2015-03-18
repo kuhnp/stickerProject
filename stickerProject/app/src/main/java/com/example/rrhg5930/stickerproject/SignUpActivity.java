@@ -104,9 +104,10 @@ public class SignUpActivity extends ActionBarActivity {
         JSONObject response = application.stickerRest.signUp(email,pw, username);
             try {
                 if(response.getString("type") == "true"){
-                    StickerApp.mainUsername = username;
                     String token = response.getString("token");
                     e.putString("token", token.toString());
+                    e.putString("username",username);
+                    e.putBoolean("isLoggedIn",true);
                     e.commit();
                     Log.d("SignUp", "token = "+token);
 

@@ -24,7 +24,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:id="@+id/editText"
+        android:id="@+id/usernameET"
         android:gravity="center"
         android:layout_marginTop="50dp"
         android:layout_alignParentLeft="true"
@@ -38,7 +38,7 @@
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:id="@+id/imageView2"
+        android:id="@+id/usernameIV"
         android:src="@drawable/profile"
         android:layout_marginTop="61dp"
         android:layout_marginLeft="6dp"
@@ -54,13 +54,13 @@
         android:layout_height="60dp"
         android:inputType="textPassword"
         android:hint="PASSWORD"
-        android:id="@+id/editText2"
+        android:id="@+id/pwdET"
         android:editable="true"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
         android:textSize="25dp"
         android:background="@drawable/login_edit_text"
-        android:layout_below="@+id/editText"
+        android:layout_below="@+id/usernameET"
         android:layout_marginTop="15dp"
         android:gravity="center"
          />
@@ -68,7 +68,7 @@
     <ImageView
         android:layout_width="55dp"
         android:layout_height="55dp"
-        android:id="@+id/imageView3"
+        android:id="@+id/pwdIV"
         android:src="@drawable/lock"
         android:layout_marginTop="128dp"
         android:layout_alignParentLeft="true"
@@ -78,13 +78,13 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_below="@id/editText2"
+        android:layout_below="@id/pwdET"
         android:background="@drawable/login_send_button"
         android:layout_marginTop="15dp"
         android:textSize="25dp"
         android:text="login"
         android:textColor="#255254"
-        android:id="@+id/button6"
+        android:id="@+id/loginB"
 />
 
 </RelativeLayout>

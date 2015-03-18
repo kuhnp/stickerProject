@@ -54,7 +54,7 @@ public class MainActivity extends ActionBarActivity {
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     GoogleCloudMessaging gcm;
     String regid;
-    String SENDER_ID = "394358907247";
+    String SENDER_ID = "";
 
     private Uri mImagePath;
     private Uri fileUri;
@@ -65,10 +65,11 @@ public class MainActivity extends ActionBarActivity {
     Button button;
     Button bFriend;
     ImageLoader imLoader;
-    public String url_temp = "http://10.0.1.60:8080/sticker";
+    public String url_temp = "http://10.0.1.73:8080/sticker";
 
     // friend Activity
     ArrayList<String> friendList;
+    ArrayList<String> pendingFriendList;
 
 
     @Override
@@ -241,6 +242,7 @@ public class MainActivity extends ActionBarActivity {
                 JSONArray friendArray = null;
                 JSONObject friend = null;
                 friendList = new ArrayList<String>();
+                pendingFriendList = new ArrayList<String>();
                 try {
                     friendArray = response.getJSONArray("friends");
                 } catch (JSONException e1) {
@@ -256,8 +258,15 @@ public class MainActivity extends ActionBarActivity {
                     }
                     try {
                         String username = friend.getString("username");
-                        friendList.add(username);
-                        Log.d("FriendActivity", "username = " + username);
+                        String isFriend = friend.getString("isFriend");
+                        String fromUser = friend.getString("fromUser");
+
+                        if(isFriend.equalsIgnoreCase("true"))
+                            friendList.add(username);
+                        else if (isFriend.equalsIgnoreCase("false") && fromUser.equalsIgnoreCase("false"))
+                            pendingFriendList.add(username);
+
+
                     } catch (JSONException e1) {
                         e1.printStackTrace();
                     }
@@ -301,6 +310,7 @@ public class MainActivity extends ActionBarActivity {
     public void goToFriendActivity(ArrayList friendList) {
         Intent intent = new Intent(this, FriendActivity.class);
         intent.putStringArrayListExtra("friendList", friendList);
+        intent.putStringArrayListExtra("pendingFriendList",pendingFriendList);
         startActivity(intent);
         finish();
     }

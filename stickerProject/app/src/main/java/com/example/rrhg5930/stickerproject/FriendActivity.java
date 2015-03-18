@@ -47,7 +47,6 @@ public class FriendActivity extends ActionBarActivity {
     private String mImagePath;
     String  selectedFriend;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +59,7 @@ public class FriendActivity extends ActionBarActivity {
         //////////  Get Friend List from previous Activity  ///////////
         Intent intent = getIntent();
         final ArrayList<String> friendList = intent.getStringArrayListExtra("friendList");
+
 
         //////////  Initialize UI  //////////
         sendB = (Button) findViewById(R.id.buttonSendFriendRequest);
@@ -87,6 +87,7 @@ public class FriendActivity extends ActionBarActivity {
         friendListView = (ListView) findViewById(R.id.listView);
         friendListView.setAdapter(adapter);
         friendListView.setItemsCanFocus(false);
+
 
 
         friendListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

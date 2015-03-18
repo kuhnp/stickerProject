@@ -1,14 +1,22 @@
 package com.example.rrhg5930.stickerproject.gcm;
 
 import android.app.IntentService;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.example.rrhg5930.stickerproject.ExampleAppWidgetProvider;
+import com.example.rrhg5930.stickerproject.MainActivity;
+import com.example.rrhg5930.stickerproject.R;
 import com.example.rrhg5930.stickerproject.StickerApp;
 import com.example.rrhg5930.stickerproject.gcm.GcmBroadcastReceiver;
 import com.example.rrhg5930.stickerproject.util.StickerUtil;
@@ -21,6 +29,8 @@ public class GcmIntentService extends IntentService {
 
     private static String TAG = "GcmIntentService";
 
+    public static final int NOTIFICATION_ID = 1;
+    private NotificationManager mNotificationManager;
 
     public GcmIntentService() {
         super("GcmIntentService");
@@ -56,18 +66,30 @@ public class GcmIntentService extends IntentService {
                 //sendNotification("Send error: " + extras.toString());
             } else if (GoogleCloudMessaging.
                     MESSAGE_TYPE_DELETED.equals(messageType)) {
-                //sendNotification("Deleted messages on server: " +
-                        //extras.toString());
-                // If it's a regular GCM message, do some work.
+
+
+
             } else if (GoogleCloudMessaging.
                     MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 // This loop represents the service doing some work.
 
-                String fromUser = intent.getStringExtra("from");
-                String url = "http://10.0.1.69:8080/sticker";
-                String imagePath = StickerUtil.downloadFile(url,getApplicationContext(),sharedPreferences.getString("token",""));
-                e.putString("imagePath", imagePath);
-                e.commit();
+                String fromUser = intent.getStringExtra("senderUsername");
+                String type = intent.getStringExtra("messageType");
+
+                if(type.equalsIgnoreCase("postSticker")) {
+
+                    String url = "http://10.0.1.75:8080/sticker";
+                    String imagePath = StickerUtil.downloadFile(url, getApplicationContext(), sharedPreferences.getString("token", ""));
+                    e.putString("imagePath", imagePath);
+                    e.commit();
+                    sendNotification("New post on your sticker! by"+fromUser);
+
+                }
+
+                else if(type.equalsIgnoreCase("friendRequest")){
+                    sendNotification("New friend Request! From "+fromUser);
+                }
+
 
                 // Post notification of received message.
                 //sendNotification("Received: " + extras.toString());
@@ -78,6 +100,24 @@ public class GcmIntentService extends IntentService {
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 
+
+    private void sendNotification(String msg) {
+        mNotificationManager = (NotificationManager)
+                this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                new Intent(this, MainActivity.class), 0);
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setContentTitle("stickME")
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(msg))
+                        .setContentText(msg)
+                        .setSmallIcon(R.drawable.ic_launcher);
+        mBuilder.setContentIntent(contentIntent);
+        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+    }
 
 
 }

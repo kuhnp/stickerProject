@@ -3,6 +3,7 @@ package com.example.rrhg5930.stickerproject;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +15,7 @@ import android.widget.RemoteViews;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  * Created by pierre on 14/02/2015.
@@ -48,15 +50,19 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
             views.setOnClickPendingIntent(R.id.button, pendingIntent);
 
+            views.setTextViewText(R.id.button,df.format(new Date()));
+
             // To update a label
-            //views.setTextViewText(R.id.widget1label, df.format(new Date()));
-            if(imagePath != "")
-            views.setImageViewUri(R.id.imageView,Uri.parse(imagePath));
+
+            if(imagePath != "") {
+                views.setImageViewUri(R.id.imageView, Uri.parse(""));
+                views.setImageViewUri(R.id.imageView, Uri.parse(imagePath));
+            }
 
 
             // Tell the AppWidgetManager to perform an update on the current app
             // widget
-            appWidgetManager.updateAppWidget(appWidgetId, views);
+            appWidgetManager.updateAppWidget(new ComponentName(context,ExampleAppWidgetProvider.class),views);
         }
     }
 

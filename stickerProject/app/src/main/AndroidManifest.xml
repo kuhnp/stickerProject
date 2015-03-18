@@ -7,46 +7,41 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- Include following permission if you load images from Internet -->
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <permission android:name="com.example.rrhg5930.stickerproject.permission.C2D_MESSAGE"
+    <permission
+        android:name="com.example.rrhg5930.stickerproject.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-    <uses-permission android:name="com.example.rrhg5930.stickerproject.permission.C2D_MESSAGE" />
 
+    <uses-permission android:name="com.example.rrhg5930.stickerproject.permission.C2D_MESSAGE" />
 
     <application
         android:name=".StickerApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:largeHeap="true">
-
-        <meta-data android:name="com.google.android.gms.version"
+        android:largeHeap="true"
+        android:theme="@style/AppTheme" >
+        <meta-data
+            android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
-
 
         <receiver
             android:name=".gcm.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
                 <category android:name="com.example.rrhg5930.gcm" />
             </intent-filter>
         </receiver>
+
         <service android:name=".gcm.GcmIntentService" />
 
         <activity
             android:name=".SignInActivity"
             android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".FirstScreen"
@@ -76,6 +71,15 @@
         <activity
             android:name=".FriendActivity"
             android:label="@string/title_activity_friend" >
+        </activity>
+        <activity
+            android:name=".SplashActivity"
+            android:label="@string/title_activity_splash" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

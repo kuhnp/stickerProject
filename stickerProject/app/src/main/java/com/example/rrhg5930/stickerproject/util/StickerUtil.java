@@ -1,15 +1,24 @@
 package com.example.rrhg5930.stickerproject.util;
 
 import android.app.DownloadManager;
+import android.appwidget.AppWidgetManager;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.rrhg5930.stickerproject.ExampleAppWidgetProvider;
 import com.example.rrhg5930.stickerproject.StickerApp;
 
 import java.io.File;
@@ -142,33 +151,63 @@ public class StickerUtil {
     }
 
     public static String downloadFile(String uRl, Context context, String token) {
+
+        /*********** Open shared preferences ************/
+        SharedPreferences sharedPreferences;
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        /*********** Create destination folder ************/
         File direct = new File(Environment.getExternalStorageDirectory()
                 + "/stickerAppReceived");
-
-
         if (!direct.exists()) {
             direct.mkdirs();
         }
 
-        DownloadManager mgr = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+        /*********** Delete previous picture ************/
+        File pic = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/stickerAppReceived/"+sharedPreferences.getString("username","")+".jpg");
+        if(pic.exists())
+            pic.delete();
 
+
+        DownloadManager mgr = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         Uri downloadUri = Uri.parse(uRl);
-        DownloadManager.Request request = new DownloadManager.Request(
-                downloadUri);
+        DownloadManager.Request request = new DownloadManager.Request(downloadUri);
+
+
+        /*********** BroadcastReceiver to handle the onComple of download ************/
+        BroadcastReceiver onComplete = new BroadcastReceiver() {
+            public void onReceive(Context ctxt, Intent intent) {
+                Toast toast = Toast.makeText(ctxt,"Download is Finished",Toast.LENGTH_SHORT);
+                toast.show();
+
+                Intent newIntent = new Intent(ctxt, ExampleAppWidgetProvider.class);
+                newIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+                // Use an array and EXTRA_APPWIDGET_IDS instead of AppWidgetManager.EXTRA_APPWIDGET_ID,
+                // since it seems the onUpdate() is only fired on that:
+                int[] ids = AppWidgetManager.getInstance(ctxt).getAppWidgetIds(new ComponentName(ctxt,ExampleAppWidgetProvider.class));
+                newIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);
+                ctxt.sendBroadcast(newIntent);
+            }
+        };
+
+
+        context.registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 
         request.setAllowedNetworkTypes(
                 DownloadManager.Request.NETWORK_WIFI)
                 .setAllowedOverRoaming(false).setTitle("Demo")
                 .addRequestHeader("token",token)
                 .setDescription("Something useful. No, really.")
-                .setDestinationInExternalPublicDir("/stickerAppReceived", StickerApp.mainUsername+".jpg");
+                .setDestinationInExternalPublicDir("/stickerAppReceived", sharedPreferences.getString("username","") + ".jpg");
 
                         mgr.enqueue(request);
 
-        String path = direct.getPath()+"/"+StickerApp.mainUsername+".jpg";
+
+        String path = direct.getPath()+"/"+sharedPreferences.getString("username","")+".jpg";
         return path;
 
     }
+
 
 
 }

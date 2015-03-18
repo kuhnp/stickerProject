@@ -2,7 +2,10 @@ package com.example.rrhg5930.stickerproject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,10 @@ import android.widget.Toast;
 
 import com.example.rrhg5930.stickerproject.util.StickerUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -67,22 +74,63 @@ public class FriendListAdapter extends BaseAdapter implements ListAdapter{
         addBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                //do something
+
                 Toast toast = Toast.makeText(context,"You have chosen: "+friendList.get(position),Toast.LENGTH_LONG);
                 toast.show();
                 notifyDataSetChanged();
-
-
             }
         });
+
+
 
 
         return view;
     }
 
 
+    public class AcceptFriendRequest extends AsyncTask<URL, Integer, Long> {
 
+        private String friendName;
+        int err = 0;
+
+
+        AcceptFriendRequest(String name){
+            this.friendName = name;
+        }
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Long doInBackground(URL... arg0) {
+
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            StickerApp application;
+            application = (StickerApp) context.getApplicationContext();
+
+            JSONObject response = application.stickerRest.acceptFriendRequest(this.friendName, sharedPreferences.getString("token", ""));
+            try {
+                if (response.getString("type") != "true")
+                    err = 1;
+                else
+                    err = 0;
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Long result) {
+            if(err == 1){
+                Toast toast = Toast.makeText(context.getApplicationContext(),"Error when accepting friends",Toast.LENGTH_LONG);
+                toast.show();
+            }
+
+        }
+    }
 
 
 
 }
+

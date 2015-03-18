@@ -3,7 +3,8 @@ var mongoose = require('mongoose');
 var friendSchema = mongoose.Schema({
     
         user1       	: String,
-        user2	        : String
+        user2	        : String,
+        isFriend        : String
      
 });
 

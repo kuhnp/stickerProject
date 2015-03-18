@@ -43,7 +43,7 @@ public class StickerRest {
     static StickerRest mInstance;
     private Context context;
     private StickerApp application;
-    private String url_base = "http://10.0.1.69:8080";
+    private String url_base = "http://10.0.1.75:8080";
 
     private StickerRest(Context context){
         this.context = context;
@@ -334,6 +334,42 @@ public class StickerRest {
         HttpPost httpPost = new HttpPost(url);
         try {
             jsonObject.put("registration_id", regId);
+            StringEntity se = new StringEntity(jsonObject.toString(), "UTF-8");
+            httpPost.setHeader("Content-type","application/json");
+            httpPost.setHeader("token",token);
+            httpPost.setEntity(se);
+            HttpResponse httpResponse = httpClient.execute(httpPost,localContext);
+            return parseAnswer(httpResponse);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+
+    }
+
+    public JSONObject acceptFriendRequest( String friendName, String token){
+
+        String url = url_base+"/friendaccept";
+        JSONObject jsonObject = new JSONObject();
+        HttpClient httpClient = getSpecialClient();
+        HttpContext localContext = new BasicHttpContext();
+        HttpPost httpPost = new HttpPost(url);
+        try {
+            jsonObject.put("friend", friendName);
             StringEntity se = new StringEntity(jsonObject.toString(), "UTF-8");
             httpPost.setHeader("Content-type","application/json");
             httpPost.setHeader("token",token);

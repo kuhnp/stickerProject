@@ -24,10 +24,7 @@ public class StickerApp extends Application{
 
     private static String TAG = "StickerApp";
 
-    public static String mainUsername;
-
     private static final String CAMERA_PATH = "camera_path";
-    private static final String MY_PREFS = "SHINDIG_PREF";
     private String cameraImagePath;
     SharedPreferences settings;
     SharedPreferences.Editor e;
@@ -41,8 +38,6 @@ public class StickerApp extends Application{
         //e = settings.edit();
         super.onCreate();
         stickerRest = StickerRest.getInstance(getApplicationContext());
-
-
     }
 
     public void setCameraPath(String cameraPath)

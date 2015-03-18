@@ -8,28 +8,25 @@
 
     <ListView
         android:layout_width="wrap_content"
-        android:layout_height="400dp"
+        android:layout_height="200dp"
         android:id="@+id/listView"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="1dp"
-        android:clickable="true"/>
+        android:clickable="true" />
 
 
-<EditText
-    android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:layout_below="@+id/listView"
-    android:layout_marginTop="10dp"
-    android:editable="true"
-    android:hint="Add Friends"
-    android:textSize="25dp"
-    android:textColor="#FFFFFF"
-    android:textColorHint="#FFFFFF"
-    android:background="@drawable/login_edit_text"
-    android:id="@+id/addFriendsET"
-    />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/listView"
+        android:layout_marginTop="10dp"
+        android:editable="true"
+        android:hint="Add Friends"
+        android:textSize="25dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:background="@drawable/login_edit_text"
+        android:id="@+id/addFriendsET"/>
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -61,6 +58,13 @@
         android:id="@+id/sendPic_btn"
         android:layout_alignTop="@+id/buttonSendFriendRequest"
         android:layout_centerHorizontal="true" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:id="@+id/listView2"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"/>
 
 
 </RelativeLayout>
