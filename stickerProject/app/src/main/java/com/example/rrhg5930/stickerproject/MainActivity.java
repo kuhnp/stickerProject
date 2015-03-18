@@ -54,7 +54,7 @@ public class MainActivity extends ActionBarActivity {
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     GoogleCloudMessaging gcm;
     String regid;
-    String SENDER_ID = "";
+    String SENDER_ID = StickerConfig.SENDER_ID;
 
     private Uri mImagePath;
     private Uri fileUri;
@@ -65,7 +65,7 @@ public class MainActivity extends ActionBarActivity {
     Button button;
     Button bFriend;
     ImageLoader imLoader;
-    public String url_temp = "http://10.0.1.73:8080/sticker";
+    public String url_temp = StickerConfig.PARAM_URL+"/sticker";
 
     // friend Activity
     ArrayList<String> friendList;
@@ -261,10 +261,12 @@ public class MainActivity extends ActionBarActivity {
                         String isFriend = friend.getString("isFriend");
                         String fromUser = friend.getString("fromUser");
 
-                        if(isFriend.equalsIgnoreCase("true"))
-                            friendList.add(username);
-                        else if (isFriend.equalsIgnoreCase("false") && fromUser.equalsIgnoreCase("false"))
-                            pendingFriendList.add(username);
+                        friendList.add(username);
+
+//                        if(isFriend.equalsIgnoreCase("true"))
+//                            friendList.add(username);
+//                        else if (isFriend.equalsIgnoreCase("false") && fromUser.equalsIgnoreCase("false"))
+//                            pendingFriendList.add(username);
 
 
                     } catch (JSONException e1) {

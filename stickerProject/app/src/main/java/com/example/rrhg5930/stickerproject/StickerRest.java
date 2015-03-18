@@ -43,7 +43,6 @@ public class StickerRest {
     static StickerRest mInstance;
     private Context context;
     private StickerApp application;
-    private String url_base = "http://10.0.1.75:8080";
 
     private StickerRest(Context context){
         this.context = context;
@@ -133,7 +132,7 @@ public class StickerRest {
 
     public JSONObject signUp(String email,String pw, String username){
 
-        String url = url_base+"/signup";
+        String url = StickerConfig.PARAM_URL+"/signup";
         JSONObject jsonObject = new JSONObject();
         HttpClient httpClient = getSpecialClient();
         HttpContext localContext = new BasicHttpContext();
@@ -171,7 +170,7 @@ public class StickerRest {
 
     public JSONObject signIn(String email,String pw){
 
-        String url = url_base+"/login";
+        String url = StickerConfig.PARAM_URL+"/login";
         JSONObject jsonObject = new JSONObject();
         HttpClient httpClient = getSpecialClient();
         HttpContext localContext = new BasicHttpContext();
@@ -207,7 +206,7 @@ public class StickerRest {
 
     public JSONObject getFriends(String token){
 
-        String url = url_base+"/friend";
+        String url = StickerConfig.PARAM_URL+"/friend";
         JSONObject jsonObject = new JSONObject();
         HttpClient httpClient = getSpecialClient();
         HttpContext localContext = new BasicHttpContext();
@@ -239,7 +238,7 @@ public class StickerRest {
 
     public JSONObject sendFriendInvite(String username, String token){
 
-        String url = url_base+"/friend";
+        String url = StickerConfig.PARAM_URL+"/friend";
         JSONObject jsonObject = new JSONObject();
         HttpClient httpClient = getSpecialClient();
         HttpContext localContext = new BasicHttpContext();
@@ -275,7 +274,7 @@ public class StickerRest {
 
     public JSONObject postSticker(String username, String token, String localPath){
 
-        String url = url_base+"/sticker";
+        String url = StickerConfig.PARAM_URL+"/sticker";
         HttpClient httpClient = getSpecialClient();
         HttpContext localContext = new BasicHttpContext();
         HttpPost httpPost = new HttpPost(url);
@@ -327,7 +326,7 @@ public class StickerRest {
 
     public JSONObject sendRegistrationIdToBackend(String regId, String token){
 
-        String url = url_base+"/notificationId";
+        String url = StickerConfig.PARAM_URL+"/notificationId";
         JSONObject jsonObject = new JSONObject();
         HttpClient httpClient = getSpecialClient();
         HttpContext localContext = new BasicHttpContext();
@@ -363,7 +362,7 @@ public class StickerRest {
 
     public JSONObject acceptFriendRequest( String friendName, String token){
 
-        String url = url_base+"/friendaccept";
+        String url = StickerConfig.PARAM_URL+"/friendaccept";
         JSONObject jsonObject = new JSONObject();
         HttpClient httpClient = getSpecialClient();
         HttpContext localContext = new BasicHttpContext();

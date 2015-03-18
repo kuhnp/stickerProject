@@ -10,6 +10,8 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,6 +49,13 @@ public class FriendActivity extends ActionBarActivity {
     private String mImagePath;
     String  selectedFriend;
 
+
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,24 +90,33 @@ public class FriendActivity extends ActionBarActivity {
             }
         });
 
+        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
 
-        //// Update UI ////
-        FriendListAdapter adapter = new FriendListAdapter(friendList,getApplicationContext());
-        friendListView = (ListView) findViewById(R.id.listView);
-        friendListView.setAdapter(adapter);
-        friendListView.setItemsCanFocus(false);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        mAdapter = new FriendAdapter(friendList);
+        mRecyclerView.setAdapter(mAdapter);
 
 
-
-        friendListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedFriend = friendList.get(position);
-                Log.d("firend", "selected friend = "+selectedFriend);
-                chosePicture();
-
-            }
-        });
+//        //// Update UI ////
+//        FriendListAdapter adapter = new FriendListAdapter(friendList,getApplicationContext());
+//        friendListView = (ListView) findViewById(R.id.listView);
+//        friendListView.setAdapter(adapter);
+//        friendListView.setItemsCanFocus(false);
+//
+//
+//
+//        friendListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                selectedFriend = friendList.get(position);
+//                Log.d("firend", "selected friend = "+selectedFriend);
+//                chosePicture();
+//
+//            }
+//        });
 
         Button sendPic;
         sendPic = (Button) findViewById(R.id.sendPic_btn);
@@ -171,11 +189,11 @@ public class FriendActivity extends ActionBarActivity {
         }
     }
 
-    void refreshFriendList(){
-        ListView friendList = (ListView) findViewById(R.id.listView);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, friendUsernameList);
-        friendList.setAdapter(arrayAdapter);
-    }
+//    void refreshFriendList(){
+//        ListView friendList = (ListView) findViewById(R.id.listView);
+//        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, friendUsernameList);
+//        friendList.setAdapter(arrayAdapter);
+//    }
 
     public void chosePicture(){
 

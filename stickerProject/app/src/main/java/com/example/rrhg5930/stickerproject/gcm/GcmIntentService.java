@@ -18,6 +18,7 @@ import com.example.rrhg5930.stickerproject.ExampleAppWidgetProvider;
 import com.example.rrhg5930.stickerproject.MainActivity;
 import com.example.rrhg5930.stickerproject.R;
 import com.example.rrhg5930.stickerproject.StickerApp;
+import com.example.rrhg5930.stickerproject.StickerConfig;
 import com.example.rrhg5930.stickerproject.gcm.GcmBroadcastReceiver;
 import com.example.rrhg5930.stickerproject.util.StickerUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -78,7 +79,7 @@ public class GcmIntentService extends IntentService {
 
                 if(type.equalsIgnoreCase("postSticker")) {
 
-                    String url = "http://10.0.1.75:8080/sticker";
+                    String url = StickerConfig.PARAM_URL+"/sticker";
                     String imagePath = StickerUtil.downloadFile(url, getApplicationContext(), sharedPreferences.getString("token", ""));
                     e.putString("imagePath", imagePath);
                     e.commit();
