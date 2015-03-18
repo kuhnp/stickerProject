@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -32,48 +33,62 @@ public class SignInActivity extends ActionBarActivity {
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
 
-    Button bSend;
-    EditText pwEditText;
-    EditText usernameEditText;
-    String username;
-    String pw;
-    int err = 0;
+    /*************   UI   **************/
+
+    private Button mBLoggin;
+    private EditText mPwEditText;
+    private EditText mUsernameEditText;
+    private TextView mSignUpTextView;
+
+    /*************   User imputs   **************/
+
+    private String mUsername;
+    private String mPwd;
+
+    /*************   Preferences & error   **************/
+    private int err = 0;
     private StickerApp application;
-    SharedPreferences sharedPref;
-    SharedPreferences.Editor e;
-    Button signUpB;
+    private SharedPreferences sharedPref;
+    private SharedPreferences.Editor e;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        /*************   Grab resources   **************/
         application = (StickerApp) getApplicationContext();
-        bSend = (Button)findViewById(R.id.loginB);
-        pwEditText = (EditText) findViewById(R.id.pwdET);
-        usernameEditText = (EditText) findViewById(R.id.usernameET);
+        mBLoggin = (Button)findViewById(R.id.loginB);
+        mPwEditText = (EditText) findViewById(R.id.pwdET);
+        mUsernameEditText = (EditText) findViewById(R.id.usernameET);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        signUpB = (Button) findViewById(R.id.signupB);
+        mSignUpTextView = (TextView) findViewById(R.id.clickableTextView);
         e = sharedPref.edit();
 
-        bSend.setOnClickListener(new View.OnClickListener() {
+        mBLoggin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                username = usernameEditText.getText().toString();
-                pw = pwEditText.getText().toString();
-                SignInTask task = new SignInTask();
-                task.execute();
-
-
+                mUsername = mUsernameEditText.getText().toString();
+                mPwd = mPwEditText.getText().toString();
+                if(mUsername.isEmpty()){
+                    Toast.makeText(getApplicationContext(),"Username is empty",Toast.LENGTH_SHORT).show();
+                }
+                else if(mPwd.isEmpty()){
+                    Toast.makeText(getApplicationContext(),"Password is empty",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    SignInTask task = new SignInTask();
+                    task.execute();
+                }
             }
         });
 
-        signUpB.setOnClickListener(new View.OnClickListener() {
+        mSignUpTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goToSignUpActivity();
             }
         });
-
     }
 
 
@@ -105,11 +120,10 @@ public class SignInActivity extends ActionBarActivity {
         protected void onPreExecute() {
             super.onPreExecute();
         }
-
         @Override
         protected Long doInBackground(URL... arg0) {
 
-            JSONObject response = application.stickerRest.signIn(username, pw);
+            JSONObject response = application.stickerRest.signIn(mUsername, mPwd);
             try {
                 if(response.getString("type") == "true"){
                     String token = response.getString("token");
@@ -117,12 +131,12 @@ public class SignInActivity extends ActionBarActivity {
                         err =1;
                     else{
                         e.putString("token", token.toString());
-                        e.putString("username", username);
+                        e.putString("username", mUsername);
                         e.putBoolean("isLoggedIn",true);
                         e.commit();
                         Log.d("SignIn", "token = " + token);
-
-                        err = 0;}
+                        err = 0;
+                    }
                 }
                 else{
                     err = 1;
@@ -146,10 +160,10 @@ public class SignInActivity extends ActionBarActivity {
         }
     }
 
-        public void goToMainActivity() {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            finish();
+    public void goToMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
         }
 
 
