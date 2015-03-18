@@ -22,13 +22,20 @@ import java.net.URL;
 
 public class SignUpActivity extends ActionBarActivity {
 
-    Button bSend;
-    EditText pwEditText;
-    EditText emailEditText;
-    EditText usernameEditText;
-    String email;
-    String pw;
-    String username;
+
+    /*************   UI   **************/
+    private Button mSignUpB;
+    private EditText mPwEditText;
+    private EditText mEmailEditText;
+    private EditText mUsernameEditText;
+
+
+    /*************   User imputs   **************/
+    private String mEmail;
+    private String mPwd;
+    private String mUsername;
+
+    /*************   Preferences & error   **************/
     int err = 0;
     private StickerApp application;
     SharedPreferences sharedPref;
@@ -39,24 +46,35 @@ public class SignUpActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        application = (StickerApp) getApplicationContext();
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         e = sharedPref.edit();
 
-        bSend = (Button) findViewById(R.id.button5);
-        pwEditText = (EditText) findViewById(R.id.editText4);
-        emailEditText = (EditText) findViewById(R.id.editText3);
-        usernameEditText = (EditText) findViewById(R.id.editText5);
-        application = (StickerApp) getApplicationContext();
+        mSignUpB = (Button) findViewById(R.id.signUpB);
+        mPwEditText = (EditText) findViewById(R.id.pwdETSignUp);
+        mEmailEditText = (EditText) findViewById(R.id.emailET);
+        mUsernameEditText = (EditText) findViewById(R.id.usernameETSignUp);
 
-        bSend.setOnClickListener(new View.OnClickListener() {
+
+        mSignUpB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                email = emailEditText.getText().toString();
-                pw = pwEditText.getText().toString();
-                username = usernameEditText.getText().toString();
-                SignUpTask task = new SignUpTask();
-                task.execute();
-
+                mEmail = mEmailEditText.getText().toString();
+                mPwd = mPwEditText.getText().toString();
+                mUsername = mUsernameEditText.getText().toString();
+                if(mUsername.isEmpty()){
+                    Toast.makeText(getApplicationContext(),"Username is empty",Toast.LENGTH_SHORT).show();
+                }
+                else if(mPwd.isEmpty()){
+                    Toast.makeText(getApplicationContext(),"Password is empty",Toast.LENGTH_SHORT).show();
+                }
+                else if(mEmail.isEmpty()){
+                    Toast.makeText(getApplicationContext(),"Email is empty",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    SignUpTask task = new SignUpTask();
+                    task.execute();
+                }
 
             }
         });
@@ -101,12 +119,12 @@ public class SignUpActivity extends ActionBarActivity {
         @Override
         protected Long doInBackground(URL... arg0) {
 
-        JSONObject response = application.stickerRest.signUp(email,pw, username);
+        JSONObject response = application.stickerRest.signUp(mEmail, mPwd, mUsername);
             try {
                 if(response.getString("type") == "true"){
                     String token = response.getString("token");
                     e.putString("token", token.toString());
-                    e.putString("username",username);
+                    e.putString("username",mUsername);
                     e.putBoolean("isLoggedIn",true);
                     e.commit();
                     Log.d("SignUp", "token = "+token);
@@ -127,7 +145,7 @@ public class SignUpActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute(Long result) {
             if(err == 0)
-        goToMainActivity();
+                goToMainActivity();
             else {
                 Toast toast = Toast.makeText(getApplicationContext(),"Error when sigining up",Toast.LENGTH_LONG);
                 toast.show();

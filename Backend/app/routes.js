@@ -204,7 +204,7 @@ app.post('/friend',ensureAuthorized,function(req, res) {
 
                         
                             var message = new gcm.Message();
-                            var sender = new gcm.Sender('-A');
+                            var sender = new gcm.Sender('');
                             message.addData({
                                 messageType: 'friendRequest',
                                 senderUsername: username

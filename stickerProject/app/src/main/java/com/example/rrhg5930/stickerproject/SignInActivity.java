@@ -58,9 +58,9 @@ public class SignInActivity extends ActionBarActivity {
 
         /*************   Grab resources   **************/
         application = (StickerApp) getApplicationContext();
-        mBLoggin = (Button)findViewById(R.id.loginB);
-        mPwEditText = (EditText) findViewById(R.id.pwdET);
-        mUsernameEditText = (EditText) findViewById(R.id.usernameET);
+        mBLoggin = (Button)findViewById(R.id.signUpB);
+        mPwEditText = (EditText) findViewById(R.id.pwdETSignUp);
+        mUsernameEditText = (EditText) findViewById(R.id.usernameETSignUp);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         mSignUpTextView = (TextView) findViewById(R.id.clickableTextView);
         e = sharedPref.edit();
