@@ -204,7 +204,7 @@ app.post('/friend',ensureAuthorized,function(req, res) {
 
                         
                             var message = new gcm.Message();
-                            var sender = new gcm.Sender('');
+                            var sender = new gcm.Sender('Gf-A');
                             message.addData({
                                 messageType: 'friendRequest',
                                 senderUsername: username
@@ -341,7 +341,7 @@ app.post('/sticker', ensureAuthorized, multer({dest: './uploads/', rename: funct
             if(usr){
                 regIds = usr.regId;
                 console.log('Dest is found, regId = '+regIds);
-                var sender = new gcm.Sender('');
+                var sender = new gcm.Sender('-A');
                 sender.send(message, regIds, function (err, result) {
                 if(err) 
                     console.log('error occured when sending');

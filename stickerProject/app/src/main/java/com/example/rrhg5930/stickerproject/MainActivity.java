@@ -13,6 +13,9 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -46,9 +49,12 @@ import java.util.Map;
 import java.util.Objects;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
 
     private static String TAG = "Main activity";
+
+    private ActionBar mActionBar;
+    private ViewPager mViewpager;
 
     /*************   GCM   **************/
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -76,8 +82,20 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         application = (StickerApp) getApplicationContext();
+
+        mViewpager = (ViewPager) findViewById(R.id.pager);
+        mActionBar = getSupportActionBar();
+
+        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        ActionBar.Tab mTabMain = mActionBar.newTab().setText("My sticker").setTabListener(this);
+        ActionBar.Tab mTabFriend = mActionBar.newTab().setText("friends").setTabListener(this);
+        mActionBar.addTab(mTabMain);
+        mActionBar.addTab(mTabFriend);
+        mViewpager.setCurrentItem(0);
+
+
         //imLoader.init(ImageLoaderConfiguration.createDefault(getApplicationContext()));
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         e = sharedPref.edit();
@@ -226,6 +244,21 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+
     }
 
     public class GetFriendTask extends AsyncTask<URL, Integer, Long> {
