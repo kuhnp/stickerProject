@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -27,6 +28,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.example.rrhg5930.stickerproject.adapter.TabsPagerAdapter;
+import com.example.rrhg5930.stickerproject.fragment.mainStickerFragment;
 import com.example.rrhg5930.stickerproject.util.StickerUtil;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -86,6 +89,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
         mViewpager = (ViewPager) findViewById(R.id.pager);
         mActionBar = getSupportActionBar();
+
+
+
+        Fragment fragment = new mainStickerFragment();
+        TabsPagerAdapter tabsPagerAdapter = new TabsPagerAdapter(getSupportFragmentManager(),fragment);
+        mViewpager.setAdapter(tabsPagerAdapter);
 
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 

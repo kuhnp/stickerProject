@@ -12,20 +12,20 @@ import java.util.ArrayList;
  */
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 
-    ArrayList<Fragment> fragmentList;
+    Fragment fragment;
 
-    public TabsPagerAdapter(FragmentManager fragmentManager, ArrayList<Fragment> fragmentList){
+    public TabsPagerAdapter(FragmentManager fragmentManager, Fragment fragment){
         super(fragmentManager);
-        this.fragmentList = fragmentList;
+        this.fragment = fragment;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return fragmentList.get(position);
+        return fragment;
     }
 
     @Override
     public int getCount() {
-        return fragmentList.size();
+        return 1;
     }
 }

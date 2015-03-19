@@ -18,6 +18,7 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:src="@drawable/image_fun"
+        android:visibility="invisible"
         />
 
     <Button
