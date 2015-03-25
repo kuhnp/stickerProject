@@ -60,8 +60,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     String regid;
     String SENDER_ID = StickerConfig.SENDER_ID;
 
-    private Uri mImagePath;
-    private Uri fileUri;
+    private String mImagePath;
+    //private Uri fileUri;
     ImageView mainImage;
     public StickerApp application;
     SharedPreferences sharedPref;
@@ -89,7 +89,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
         ArrayList<Fragment> fragments = new ArrayList<>();
         fragments.add(new MainStickerFragment());
-        fragments.add(new FriendListFragment());
+        fragments.add(new FriendListFragment(MainActivity.this));
 
         TabsPagerAdapter tabsPagerAdapter = new TabsPagerAdapter(getSupportFragmentManager(),fragments);
         mViewpager.setAdapter(tabsPagerAdapter);
@@ -171,9 +171,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 galleryIntent.setType("image/*");
                 galleryIntent.addCategory(Intent.CATEGORY_OPENABLE);
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                fileUri = StickerUtil.getOutputMediaFileUri(StickerUtil.MEDIA_TYPE_IMAGE);
+                //fileUri = StickerUtil.getOutputMediaFileUri(StickerUtil.MEDIA_TYPE_IMAGE);
                 //application.setCameraPath(fileUri.getPath());
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,fileUri);
+               // cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,fileUri);
 
                 Intent chooser = new Intent(Intent.ACTION_CHOOSER);
                 chooser.putExtra(Intent.EXTRA_INTENT,galleryIntent);
@@ -212,17 +212,23 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     {
         if((requestCode == 1) && (resultCode == RESULT_OK))
         {
-            mImagePath = result.getData();
-            mainImage.setImageURI(mImagePath);
-            e.putString("imagePath", mImagePath.toString());
-            e.commit();
-            Log.d("path", "path = "+sharedPref.getString("imagePath",""));
+            Uri imageUri = result.getData();
+            mImagePath = StickerUtil.getRealPathFromURI(imageUri,getApplicationContext());
 
-            Intent intent = new Intent(this,ExampleAppWidgetProvider.class);
-            intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-            int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(),ExampleAppWidgetProvider.class));
-            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);
-            sendBroadcast(intent);
+            FriendAdapter.mImagePath = mImagePath;
+            //mImagePath = result.getData();
+
+            //mainImage.setImageURI(mImagePath);
+
+//            e.putString("imagePath", mImagePath.toString());
+//            e.commit();
+//            Log.d("path", "path = "+sharedPref.getString("imagePath",""));
+
+//            Intent intent = new Intent(this,ExampleAppWidgetProvider.class);
+//            intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+//            int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(),ExampleAppWidgetProvider.class));
+//            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);
+//            sendBroadcast(intent);
         }
 
     }

@@ -29,8 +29,11 @@ import java.util.ArrayList;
  */
 public class FriendListFragment extends Fragment {
 
+
+
     private StickerApp application;
     private SharedPreferences sharedPreferences;
+    private Context context;
 
     private RecyclerView friendListRecyclerView;
     private RecyclerView pendindFriendListRecyclerView;
@@ -49,10 +52,15 @@ public class FriendListFragment extends Fragment {
 
     private boolean tmp = false;
 
+    public FriendListFragment(Context context){
+        this.context = context;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         application = (StickerApp) getActivity().getApplicationContext();
+
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application.getApplicationContext());
 
         friendList = new ArrayList<>();
@@ -73,7 +81,7 @@ public class FriendListFragment extends Fragment {
         friendListLayoutManager = new LinearLayoutManager(getActivity());
         friendListRecyclerView.setLayoutManager(friendListLayoutManager);
 
-        friendListAdapter = new FriendAdapter(friendList, false, application, sharedPreferences, application.getApplicationContext());
+        friendListAdapter = new FriendAdapter(friendList, false, application, sharedPreferences, context);
         friendListRecyclerView.setAdapter(friendListAdapter);
 
 
@@ -85,7 +93,7 @@ public class FriendListFragment extends Fragment {
         pendingFriendListLayoutManager = new LinearLayoutManager(getActivity());
         pendindFriendListRecyclerView.setLayoutManager(pendingFriendListLayoutManager);
 
-        pendingFriendListAdapter = new FriendAdapter(pendingFriendList, true, application, sharedPreferences, application.getApplicationContext());
+        pendingFriendListAdapter = new FriendAdapter(pendingFriendList, true, application, sharedPreferences, context);
         pendindFriendListRecyclerView.setAdapter(pendingFriendListAdapter);
 
         addFriendLayout = (RelativeLayout) rootView.findViewById(R.id.addFriendLayout);

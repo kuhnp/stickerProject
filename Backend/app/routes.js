@@ -357,8 +357,8 @@ app.post('/sticker', ensureAuthorized, multer({dest: './uploads/', rename: funct
     var username = decode.username;
 
     var message = new gcm.Message();
-    message.addData('MessageType', 'postSticker');
-    message.addData('from',username);
+    message.addData('messageType', 'postSticker');
+    message.addData('senderUsername',username);
     var regIds ;
 
     console.log('post sticker to '+dest+' , before search function');
