@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rrhg5930.stickerproject.asynctask.GetFriendTask;
+import com.example.rrhg5930.stickerproject.model.User;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
@@ -27,6 +29,8 @@ import java.net.URL;
 public class SignInActivity extends ActionBarActivity {
 
     private static String TAG = "Sign IN activity";
+
+    private User user;
 
 
     /*************   GCM   **************/
@@ -136,6 +140,8 @@ public class SignInActivity extends ActionBarActivity {
                         e.commit();
                         Log.d("SignIn", "token = " + token);
                         err = 0;
+
+                        user = User.getInstance();
                     }
                 }
                 else{
@@ -151,8 +157,11 @@ public class SignInActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute(Long result) {
 
-            if(err == 0)
-                goToMainActivity();
+            if(err == 0) {
+
+                GetFriendTask getFriendTask = new GetFriendTask(application, sharedPref, SignInActivity.this);
+                getFriendTask.execute();
+            }
             else{
                 Toast toast = Toast.makeText(getApplicationContext(),"Error when login...",Toast.LENGTH_LONG);
                 toast.show();

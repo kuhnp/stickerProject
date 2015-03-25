@@ -135,8 +135,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         bFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GetFriendTask task = new GetFriendTask();
-                task.execute();
+                //GetFriendTask task = new GetFriendTask();
+                //task.execute();
 
             }
         });

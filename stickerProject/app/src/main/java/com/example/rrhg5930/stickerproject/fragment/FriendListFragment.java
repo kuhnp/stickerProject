@@ -13,6 +13,7 @@ import android.widget.Button;
 
 import com.example.rrhg5930.stickerproject.FriendAdapter;
 import com.example.rrhg5930.stickerproject.R;
+import com.example.rrhg5930.stickerproject.model.User;
 
 import java.util.ArrayList;
 
@@ -31,25 +32,20 @@ public class FriendListFragment extends Fragment {
     private RecyclerView.LayoutManager pendingFriendListLayoutManager;
     private Button showPendingFriendListButton;
 
+    private User user;
+
     private boolean tmp = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         friendList = new ArrayList<>();
-
-        friendList.add("Benoit");
-        friendList.add("george");
-        friendList.add("hugo");
-        friendList.add("martin");
-
         pendingFriendList = new ArrayList<>();
-        pendingFriendList.add("remi");
-        pendingFriendList.add("thomas");
-        pendingFriendList.add("cyril");
-        pendingFriendList.add("romain");
-        pendingFriendList.add("charley");
 
+        user = User.getInstance();
+
+        friendList = user.friendList;
+        pendingFriendList = user.pendingFriendList;
 
 
         View rootView = inflater.inflate(R.layout.friendlist_layout, container, false);
