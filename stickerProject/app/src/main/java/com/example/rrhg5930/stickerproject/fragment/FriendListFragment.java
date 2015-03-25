@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 import com.example.rrhg5930.stickerproject.FriendAdapter;
 import com.example.rrhg5930.stickerproject.R;
@@ -31,6 +33,9 @@ public class FriendListFragment extends Fragment {
     private RecyclerView.LayoutManager friendListLayoutManager;
     private RecyclerView.LayoutManager pendingFriendListLayoutManager;
     private Button showPendingFriendListButton;
+    private EditText addFriendEditText;
+    private Button addFriendButton;
+    private RelativeLayout addFriendLayout;
 
     private User user;
 
@@ -38,6 +43,7 @@ public class FriendListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
 
         friendList = new ArrayList<>();
         pendingFriendList = new ArrayList<>();
@@ -72,23 +78,38 @@ public class FriendListFragment extends Fragment {
         pendingFriendListAdapter = new FriendAdapter(pendingFriendList);
         pendindFriendListRecyclerView.setAdapter(pendingFriendListAdapter);
 
+        addFriendLayout = (RelativeLayout) rootView.findViewById(R.id.addFriendLayout);
+        addFriendEditText = (EditText) rootView.findViewById(R.id.addFriendET);
+        addFriendButton = (Button) rootView.findViewById(R.id.addFriendB);
+
+
+        // Set the Button to show the pendingListFriend
         showPendingFriendListButton = (Button) rootView.findViewById(R.id.buttonFrien);
         showPendingFriendListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!tmp) {
                     pendindFriendListRecyclerView.setVisibility(View.VISIBLE);
-
+                    addFriendLayout.setVisibility(View.VISIBLE);
                     Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.abc_slide_in_bottom);
                     pendindFriendListRecyclerView.startAnimation(animation);
                     friendListRecyclerView.setVisibility(View.INVISIBLE);
+
                     tmp = true;
                 } else {
                     pendindFriendListRecyclerView.setVisibility(View.GONE);
+                    addFriendLayout.setVisibility(View.GONE);
                     friendListRecyclerView.setVisibility(View.VISIBLE);
                     tmp = false;
                 }
 
+
+            }
+        });
+
+        addFriendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
             }
         });
