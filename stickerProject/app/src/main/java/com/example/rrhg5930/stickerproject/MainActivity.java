@@ -7,7 +7,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -19,7 +18,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,15 +27,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.example.rrhg5930.stickerproject.adapter.TabsPagerAdapter;
-import com.example.rrhg5930.stickerproject.fragment.mainStickerFragment;
+import com.example.rrhg5930.stickerproject.fragment.FriendListFragment;
+import com.example.rrhg5930.stickerproject.fragment.MainStickerFragment;
 import com.example.rrhg5930.stickerproject.util.StickerUtil;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,7 +45,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
@@ -92,9 +87,29 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
 
 
-        Fragment fragment = new mainStickerFragment();
-        TabsPagerAdapter tabsPagerAdapter = new TabsPagerAdapter(getSupportFragmentManager(),fragment);
+        ArrayList<Fragment> fragments = new ArrayList<>();
+        fragments.add(new MainStickerFragment());
+        fragments.add(new FriendListFragment());
+
+        TabsPagerAdapter tabsPagerAdapter = new TabsPagerAdapter(getSupportFragmentManager(),fragments);
         mViewpager.setAdapter(tabsPagerAdapter);
+
+        mViewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mActionBar.setSelectedNavigationItem(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
@@ -103,6 +118,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         mActionBar.addTab(mTabMain);
         mActionBar.addTab(mTabFriend);
         mViewpager.setCurrentItem(0);
+
+
+
+
 
 
         //imLoader.init(ImageLoaderConfiguration.createDefault(getApplicationContext()));
@@ -257,7 +276,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-
+        mViewpager.setCurrentItem(tab.getPosition());
     }
 
     @Override

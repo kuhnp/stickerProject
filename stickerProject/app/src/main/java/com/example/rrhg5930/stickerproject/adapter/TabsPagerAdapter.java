@@ -1,9 +1,13 @@
 package com.example.rrhg5930.stickerproject.adapter;
 
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.example.rrhg5930.stickerproject.fragment.FriendListFragment;
+import com.example.rrhg5930.stickerproject.fragment.MainStickerFragment;
 
 import java.util.ArrayList;
 
@@ -12,20 +16,23 @@ import java.util.ArrayList;
  */
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 
-    Fragment fragment;
+    ArrayList<Fragment> fragments;
 
-    public TabsPagerAdapter(FragmentManager fragmentManager, Fragment fragment){
+    public TabsPagerAdapter(FragmentManager fragmentManager, ArrayList<Fragment> fragments){
         super(fragmentManager);
-        this.fragment = fragment;
+        this.fragments = fragments;
+
     }
 
     @Override
     public Fragment getItem(int position) {
-        return fragment;
+        return fragments.get(position);
     }
+
+
 
     @Override
     public int getCount() {
-        return 1;
+        return fragments.size();
     }
 }
