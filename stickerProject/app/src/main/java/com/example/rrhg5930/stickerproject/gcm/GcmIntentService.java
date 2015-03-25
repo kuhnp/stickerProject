@@ -91,6 +91,10 @@ public class GcmIntentService extends IntentService {
                     sendNotification("New friend Request! From "+fromUser);
                 }
 
+                else if(type.equalsIgnoreCase("friendRequestAccepted")){
+                    sendNotification(""+fromUser+" has accepted your invitation");
+                }
+
 
                 // Post notification of received message.
                 //sendNotification("Received: " + extras.toString());

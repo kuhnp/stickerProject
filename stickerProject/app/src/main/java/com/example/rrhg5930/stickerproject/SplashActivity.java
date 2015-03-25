@@ -9,17 +9,22 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.rrhg5930.stickerproject.asynctask.GetFriendTask;
+
 
 public class SplashActivity extends ActionBarActivity {
 
     SharedPreferences sharedPreferences;
+    StickerApp application;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        application = (StickerApp) getApplicationContext();
         setContentView(R.layout.activity_splash);
+
 
         final boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn",false);
 
@@ -28,12 +33,15 @@ public class SplashActivity extends ActionBarActivity {
             @Override
             public void run() {
                 Intent intent;
-                if(isLoggedIn)
-                    intent = new Intent(SplashActivity.this, MainActivity.class);
-                else
+                if(isLoggedIn){
+                    GetFriendTask getFriendTask = new GetFriendTask(application, sharedPreferences, SplashActivity.this);
+                    getFriendTask.execute();
+                }
+                else {
                     intent = new Intent(SplashActivity.this, SignInActivity.class);
-                SplashActivity.this.startActivity(intent);
-                SplashActivity.this.finish();
+                    SplashActivity.this.startActivity(intent);
+                    SplashActivity.this.finish();
+                }
             }
         }, 4000);
     }

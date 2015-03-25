@@ -99,12 +99,15 @@ public class FriendListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (!tmp) {
-                    pendindFriendListRecyclerView.setVisibility(View.VISIBLE);
+                    if(pendingFriendList.size() != 0) {
+                        pendindFriendListRecyclerView.setVisibility(View.VISIBLE);
+                        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.abc_slide_in_bottom);
+                        pendindFriendListRecyclerView.startAnimation(animation);
+                        friendListRecyclerView.setVisibility(View.INVISIBLE);
+                    }
                     addFriendLayout.setVisibility(View.VISIBLE);
-                    Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.abc_slide_in_bottom);
-                    pendindFriendListRecyclerView.startAnimation(animation);
-                    friendListRecyclerView.setVisibility(View.INVISIBLE);
-
+                    Animation animation2 = AnimationUtils.loadAnimation(getActivity(), R.anim.abc_slide_in_bottom);
+                    addFriendLayout.startAnimation(animation2);
                     tmp = true;
                 } else {
                     pendindFriendListRecyclerView.setVisibility(View.GONE);

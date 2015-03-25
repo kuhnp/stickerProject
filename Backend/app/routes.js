@@ -267,9 +267,39 @@ app.post('/friendaccept', ensureAuthorized, function(req,res){
             console.log('Friendship found');
             friend.isFriend = 'true';
             friend.save(function(err,friendSaved){
-                res.json({
-                type: true
+                var message = new gcm.Message();
+                var sender = new gcm.Sender('-A');
+                message.addData({
+                    messageType: 'friendRequestAccepted',
+                    senderUsername: username
                 });
+                User.findOne({'username':req.body.friend}, function(err2,user){
+                    if(err2){
+                        res.json({
+                            type: false,
+                            errorCode: 0
+                        });
+                    }
+                    else{
+                        if(user){
+                            console.log('regId = '+user.regId);
+                            var regId = user.regId;
+                            sender.send(message, regId, function (err, result) {
+                            if(err) 
+                                console.log('error occured when sending');
+                            else    
+                                console.log('message sent to '+req.body.friend);
+                            });
+
+                            res.json({
+                            type: true
+                            });
+                        }
+                        else
+                            console.log(''+user.regId+' not found');
+                    }
+                });
+                
             });
         }
     });
