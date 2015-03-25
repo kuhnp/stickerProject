@@ -261,9 +261,12 @@ app.post('/friendaccept', ensureAuthorized, function(req,res){
                     ]
 
     }, function(err,friend){
+        console.log('aaaa');
+        console.log(friend);
         if(friend){
+            console.log('Friendship found');
             friend.isFriend = 'true';
-            friend.save(function(err,res){
+            friend.save(function(err,friendSaved){
                 res.json({
                 type: true
                 });

@@ -96,8 +96,8 @@ public class FriendActivity extends ActionBarActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new FriendAdapter(friendList);
-        mRecyclerView.setAdapter(mAdapter);
+        //mAdapter = new FriendAdapter(friendList, true);
+        //mRecyclerView.setAdapter(mAdapter);
 
 
 //        //// Update UI ////
