@@ -79,10 +79,15 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
                 if(holder == null){
                     holder = new ViewHolder(view);
                     holder.mTextView = (TextView) view.findViewById(R.id.list_item_string);
+                    holder.mImageView = (ImageView) view.findViewById(R.id.friendListIV);
+                    holder.mButton = (Button) view.findViewById(R.id.addFriendB);
                 }
 
                 String name = cursor.getString(cursor.getColumnIndex("name"));
+
+
                 holder.mTextView.setText(Html.fromHtml(name));
+                imageLoader.displayImage(StickerConfig.PARAM_URL+"/sticker/"+name,holder.mImageView);
             }
         };
     }

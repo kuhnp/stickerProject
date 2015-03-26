@@ -15,8 +15,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_CREATE = "create table friends (" +
         "_id integer primary key autoincrement, "+
-        "name text not null, "+
-        "friendId text not null);";
+        "name text not null);";
 
 
     public DbHelper(Context context){

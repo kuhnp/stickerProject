@@ -41,7 +41,7 @@ public class DbAdapter {
     public Cursor getAllFriends(String selection, String[] selectionArgs, String order){
         Log.d("Content Provider", "Before query");
         Cursor mCursor = database.query(true,DATABASE_FRIENDS, new String[] {
-                "_id","name","friendId"
+                "_id","name"
         },selection,selectionArgs,null,null,order,null);
         Log.d("Content Provider", "After query, cursor size = "+mCursor.getCount());
         return mCursor;

@@ -1,5 +1,6 @@
 package com.example.rrhg5930.stickerproject;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
@@ -34,8 +35,9 @@ public class SplashActivity extends ActionBarActivity {
             public void run() {
                 Intent intent;
                 if(isLoggedIn){
-                    GetFriendTask getFriendTask = new GetFriendTask(application, sharedPreferences, SplashActivity.this);
-                    getFriendTask.execute();
+                    intent = new Intent(SplashActivity.this, MainActivity.class);
+                    SplashActivity.this.startActivity(intent);
+                    SplashActivity.this.finish();
                 }
                 else {
                     intent = new Intent(SplashActivity.this, SignInActivity.class);

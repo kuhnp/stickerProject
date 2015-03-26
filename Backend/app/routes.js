@@ -409,6 +409,18 @@ app.get('/sticker', ensureAuthorized,function(req,res){
 });
 
 
+app.get('/sticker/:user_id', ensureAuthorized,function(req,res){
+    console.log('sticker request received');
+    var decode = jwt.verify(req.token,process.env.JWT_SECRET);
+    var username = decode.username;
+    console.log('sticker request for '+req.params.user_id);
+
+
+    res.sendfile('/Users/pierre/Documents/Git/stickerProject/Backend/uploads/'+req.params.user_id+'.jpg');
+
+});
+
+
 app.post('/notificationId', ensureAuthorized,function(req,res){
     console.log('received new registration id');
     var decode = jwt.verify(req.token,process.env.JWT_SECRET);
