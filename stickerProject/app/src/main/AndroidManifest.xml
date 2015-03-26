@@ -55,6 +55,10 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/appwidget" />
         </receiver>
+        <provider
+            android:authorities="com.example.rrhg5930.stickerproject.database.StickerContentProvider"
+            android:name="com.example.rrhg5930.stickerproject.database.StickerContentProvider">
+        </provider>
 
         <activity
             android:name=".MainActivity"
