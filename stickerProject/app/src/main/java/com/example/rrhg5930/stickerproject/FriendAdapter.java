@@ -12,11 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.rrhg5930.stickerproject.asynctask.AcceptFriendTask;
 import com.example.rrhg5930.stickerproject.asynctask.PostStickerTask;
 import com.example.rrhg5930.stickerproject.util.StickerUtil;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
@@ -25,6 +27,7 @@ import java.util.ArrayList;
  */
 public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder>  {
 
+    private ImageLoader imageLoader = ImageLoader.getInstance();
     private StickerApp application;
     private SharedPreferences sharedPreferences;
     private Context context;
@@ -40,11 +43,13 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
 
         public TextView mTextView;
         public Button mButton;
+        public ImageView mImageView;
 
         public ViewHolder(View v) {
             super(v);
             mTextView = (TextView) v.findViewById(R.id.list_item_string);
             mButton = (Button) v.findViewById(R.id.add_btn);
+            mImageView = (ImageView) v.findViewById(R.id.friendListIV);
         }
     }
     public FriendAdapter(ArrayList<String> myDataset, boolean isPending, StickerApp application, SharedPreferences sharedPreferences, Context context) {
@@ -67,11 +72,13 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
     public void onBindViewHolder(final FriendAdapter.ViewHolder holder, int i) {
         holder.mTextView.setText(mDataset.get(i));
         friendSelected = mDataset.get(i);
+
         if(isPending)
             holder.mButton.setText("Accepts");
-        else
+        else {
             holder.mButton.setText("Post");
-
+            imageLoader.displayImage(StickerConfig.PARAM_URL+"/sticker",holder.mImageView);
+        }
         holder.mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

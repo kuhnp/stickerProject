@@ -81,11 +81,16 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         application = (StickerApp) getApplicationContext();
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        e = sharedPref.edit();
+
 
         mViewpager = (ViewPager) findViewById(R.id.pager);
         mActionBar = getSupportActionBar();
 
-
+        Map<String, String> headers = new HashMap<String, String>();
+        headers.put("token",sharedPref.getString("token",""));
+        application.setupImageLoader(headers);
 
         ArrayList<Fragment> fragments = new ArrayList<>();
         fragments.add(new MainStickerFragment());
@@ -125,8 +130,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
 
         //imLoader.init(ImageLoaderConfiguration.createDefault(getApplicationContext()));
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        e = sharedPref.edit();
+
         mainImage = (ImageView) findViewById(R.id.button);
         bFriend = (Button) findViewById(R.id.bFriend);
 
