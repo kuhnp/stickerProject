@@ -6,5 +6,5 @@ package com.example.rrhg5930.stickerproject;
 public class StickerConfig {
 
     public final static String PARAM_URL = "http://10.0.1.96:8080";
-    public final static String SENDER_ID = "";
+    public final static String SENDER_ID = "394358907247";
 }

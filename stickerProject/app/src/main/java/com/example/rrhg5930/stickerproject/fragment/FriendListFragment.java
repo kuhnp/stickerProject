@@ -2,6 +2,7 @@ package com.example.rrhg5930.stickerproject.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,8 @@ import com.example.rrhg5930.stickerproject.FriendAdapter;
 import com.example.rrhg5930.stickerproject.R;
 import com.example.rrhg5930.stickerproject.StickerApp;
 import com.example.rrhg5930.stickerproject.asynctask.AddFriendTask;
+import com.example.rrhg5930.stickerproject.database.DbAdapter;
+import com.example.rrhg5930.stickerproject.database.StickerContentProvider;
 import com.example.rrhg5930.stickerproject.model.User;
 
 import java.util.ArrayList;
@@ -59,6 +62,18 @@ public class FriendListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+
+        String whereClause ="name = ?";
+        String[] whereArgs = new String[] {
+                "g3"
+        };
+        Cursor c = context.getContentResolver().query(StickerContentProvider.FRIENDS_CONTENT_URI, null, null, null, null);
+//        String a = null;
+//        c.moveToNext();
+//        if (c.getCount() >  1) {
+//             a = c.getString(c.getColumnIndex("name"));
+//        }
+
         application = (StickerApp) getActivity().getApplicationContext();
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application.getApplicationContext());
@@ -81,7 +96,7 @@ public class FriendListFragment extends Fragment {
         friendListLayoutManager = new LinearLayoutManager(getActivity());
         friendListRecyclerView.setLayoutManager(friendListLayoutManager);
 
-        friendListAdapter = new FriendAdapter(friendList, false, application, sharedPreferences, context);
+        friendListAdapter = new FriendAdapter(friendList, false, application, sharedPreferences, context, c);
         friendListRecyclerView.setAdapter(friendListAdapter);
 
 
@@ -93,7 +108,7 @@ public class FriendListFragment extends Fragment {
         pendingFriendListLayoutManager = new LinearLayoutManager(getActivity());
         pendindFriendListRecyclerView.setLayoutManager(pendingFriendListLayoutManager);
 
-        pendingFriendListAdapter = new FriendAdapter(pendingFriendList, true, application, sharedPreferences, context);
+        pendingFriendListAdapter = new FriendAdapter(pendingFriendList, true, application, sharedPreferences, context, c);
         pendindFriendListRecyclerView.setAdapter(pendingFriendListAdapter);
 
         addFriendLayout = (RelativeLayout) rootView.findViewById(R.id.addFriendLayout);

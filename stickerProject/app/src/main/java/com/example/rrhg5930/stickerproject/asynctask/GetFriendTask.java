@@ -2,6 +2,7 @@ package com.example.rrhg5930.stickerproject.asynctask;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +11,8 @@ import android.util.Log;
 
 import com.example.rrhg5930.stickerproject.MainActivity;
 import com.example.rrhg5930.stickerproject.StickerApp;
+import com.example.rrhg5930.stickerproject.database.DbAdapter;
+import com.example.rrhg5930.stickerproject.database.StickerContentProvider;
 import com.example.rrhg5930.stickerproject.model.User;
 
 import org.json.JSONArray;
@@ -90,6 +93,18 @@ public class GetFriendTask extends AsyncTask<URL, Integer, Long> {
 
     @Override
     protected void onPostExecute(Long result) {
+        //save in db
+
+        User user = User.getInstance();
+        ArrayList<String> f = user.friendList;
+        for(int i = 0; i <= friendList.size(); i++){
+            ContentValues values = new ContentValues();
+            values.put("name", f.get(i));
+            values.put("friendId", "salutttt");
+            context.getContentResolver().insert(StickerContentProvider.FRIENDS_CONTENT_URI,values);
+        }
+
+
         Intent intent = new Intent(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
