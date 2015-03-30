@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/addFriendLayout"
-        android:layout_below="@+id/friendRV"
+        android:layout_above="@+id/buttonFrien"
         android:visibility="gone">
 
         <EditText

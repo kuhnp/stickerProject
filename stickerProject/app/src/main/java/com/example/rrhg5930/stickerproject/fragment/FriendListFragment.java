@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +26,7 @@ import com.example.rrhg5930.stickerproject.adapter.PendingFriendAdapter;
 import com.example.rrhg5930.stickerproject.asynctask.AddFriendTask;
 import com.example.rrhg5930.stickerproject.database.StickerContentProvider;
 import com.example.rrhg5930.stickerproject.model.User;
+import com.example.rrhg5930.stickerproject.observer.StickerContentObserver;
 
 import java.util.ArrayList;
 
@@ -31,8 +34,6 @@ import java.util.ArrayList;
  * Created by pierre on 23/03/2015.
  */
 public class FriendListFragment extends Fragment {
-
-
 
     private StickerApp application;
     private SharedPreferences sharedPreferences;
@@ -51,11 +52,13 @@ public class FriendListFragment extends Fragment {
     private Button addFriendButton;
     private RelativeLayout addFriendLayout;
 
+    private StickerContentObserver contentObserver;
+
     private User user;
+    Cursor c;
+    Cursor c1;
 
     private boolean tmp = false;
-    String whereClause;
-    String[] whereArgs;
 
     public FriendListFragment(Context context){
         this.context = context;
@@ -63,16 +66,6 @@ public class FriendListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-
-
-
-
-//        String a = null;
-//        c.moveToNext();
-//        if (c.getCount() >  1) {
-//             a = c.getString(c.getColumnIndex("name"));
-//        }
 
         application = (StickerApp) getActivity().getApplicationContext();
 
@@ -86,6 +79,22 @@ public class FriendListFragment extends Fragment {
         friendList = user.friendList;
         pendingFriendList = user.pendingFriendList;
 
+        Handler mHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                // When data change, reset both recycler views with new data
+                c = findFriendinDb();
+                friendListAdapter = new FriendAdapter(friendList, false, application, sharedPreferences, context, c);
+                friendListRecyclerView.setAdapter(friendListAdapter);
+
+                c1 = findPendingFriendinDb();
+                pendingFriendListAdapter = new PendingFriendAdapter(pendingFriendList, true, application, sharedPreferences, context, c1);
+                pendindFriendListRecyclerView.setAdapter(pendingFriendListAdapter);
+            }
+        };
+        contentObserver = new StickerContentObserver(mHandler, 0);
+        this.getActivity().getContentResolver().registerContentObserver(StickerContentProvider.FRIENDS_CONTENT_URI, true, contentObserver);
+
 
         View rootView = inflater.inflate(R.layout.friendlist_layout, container, false);
 
@@ -96,11 +105,8 @@ public class FriendListFragment extends Fragment {
         friendListLayoutManager = new LinearLayoutManager(getActivity());
         friendListRecyclerView.setLayoutManager(friendListLayoutManager);
 
-        whereClause ="isfriend = ?";
-        whereArgs = new String[] {
-                "true"
-        };
-        Cursor c = context.getContentResolver().query(StickerContentProvider.FRIENDS_CONTENT_URI, null, whereClause, whereArgs, null);
+        // Query db for friends
+        c = findFriendinDb();
         friendListAdapter = new FriendAdapter(friendList, false, application, sharedPreferences, context, c);
         friendListRecyclerView.setAdapter(friendListAdapter);
 
@@ -113,13 +119,8 @@ public class FriendListFragment extends Fragment {
         pendingFriendListLayoutManager = new LinearLayoutManager(getActivity());
         pendindFriendListRecyclerView.setLayoutManager(pendingFriendListLayoutManager);
 
-
-        whereClause ="isfriend = ?";
-        whereArgs = new String[] {
-                "false"
-        };
-        Cursor c1 = context.getContentResolver().query(StickerContentProvider.FRIENDS_CONTENT_URI, null, whereClause, whereArgs, null);
-
+        // Query db for pending friends
+        c1 = findPendingFriendinDb();
         pendingFriendListAdapter = new PendingFriendAdapter(pendingFriendList, true, application, sharedPreferences, context, c1);
         pendindFriendListRecyclerView.setAdapter(pendingFriendListAdapter);
 
@@ -165,5 +166,24 @@ public class FriendListFragment extends Fragment {
         });
         return rootView;
 
+    }
+
+
+    Cursor findFriendinDb(){
+        String whereClause ="isfriend = ?";
+        String[] whereArgs = new String[] {
+                "true"
+        };
+        Cursor cursor = context.getContentResolver().query(StickerContentProvider.FRIENDS_CONTENT_URI, null, whereClause, whereArgs, null);
+        return cursor;
+    }
+
+    Cursor findPendingFriendinDb(){
+        String whereClause ="isfriend = ?";
+        String[] whereArgs = new String[] {
+                "false"
+        };
+        Cursor cursor = context.getContentResolver().query(StickerContentProvider.FRIENDS_CONTENT_URI, null, whereClause, whereArgs, null);
+        return cursor;
     }
 }

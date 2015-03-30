@@ -56,9 +56,6 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         public ViewHolder(View v) {
             super(v);
             v1 = itemView.findViewById(R.id.card_view);
-//            mTextView = (TextView) v.findViewById(R.id.list_item_string);
-//            mButton = (Button) v.findViewById(R.id.add_btn);
-//            mImageView = (ImageView) v.findViewById(R.id.friendListIV);
         }
     }
     public FriendAdapter(ArrayList<String> myDataset, final boolean isPending, StickerApp application, SharedPreferences sharedPreferences, Context context, Cursor c ) {
@@ -77,36 +74,19 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
 
             @Override
             public void bindView(View view, Context context, Cursor cursor) {
-                if(!isPending) {
-                    if (cursor.getString(cursor.getColumnIndex("isfriend")).equalsIgnoreCase("true")) {
-                        ViewHolder holder = (ViewHolder) view.getTag();
-                        if (holder == null) {
-                            holder = new ViewHolder(view);
-                            holder.mTextView = (TextView) view.findViewById(R.id.list_item_string);
-                            holder.mImageView = (ImageView) view.findViewById(R.id.friendListIV);
-                            holder.mButton = (Button) view.findViewById(R.id.addFriendB);
-                        }
-                        String name = cursor.getString(cursor.getColumnIndex("name"));
-                        holder.mTextView.setText(Html.fromHtml(name));
-                        imageLoader.displayImage(StickerConfig.PARAM_URL + "/sticker/" + name, holder.mImageView);
-                    }
-                }
 
-                else{
-                    if (cursor.getString(cursor.getColumnIndex("isfriend")).equalsIgnoreCase("false")) {
-                        ViewHolder holder = (ViewHolder) view.getTag();
-                        if (holder == null) {
-                            holder = new ViewHolder(view);
-                            holder.mTextView = (TextView) view.findViewById(R.id.list_item_string);
-                            holder.mImageView = (ImageView) view.findViewById(R.id.friendListIV);
-                            holder.mButton = (Button) view.findViewById(R.id.addFriendB);
-                        }
-                        String name = cursor.getString(cursor.getColumnIndex("name"));
-                        holder.mTextView.setText(Html.fromHtml(name));
-                        //imageLoader.displayImage(StickerConfig.PARAM_URL + "/sticker/" + name, holder.mImageView);
-                    }
+                ViewHolder holder = (ViewHolder) view.getTag();
+                if (holder == null)
+                    holder = new ViewHolder(view);
 
-                }
+                holder.mTextView = (TextView) view.findViewById(R.id.list_item_string);
+                holder.mImageView = (ImageView) view.findViewById(R.id.friendListIV);
+                holder.mButton = (Button) view.findViewById(R.id.add_btn);
+                String name = cursor.getString(cursor.getColumnIndex("name"));
+                holder.mTextView.setText(Html.fromHtml(name));
+                holder.mButton.setVisibility(View.GONE);
+
+                //imageLoader.displayImage(StickerConfig.PARAM_URL + "/sticker/" + name, holder.mImageView);
 //
             }
         };
@@ -121,28 +101,9 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(final FriendAdapter.ViewHolder holder, int i) {
-
-        if(!isPending) {
-            Cursor cursor = cursorAdapter.getCursor();
-            cursor.moveToPosition(i);
-            if (cursor.getString(cursor.getColumnIndex("isfriend")).equalsIgnoreCase("true"))
-                cursorAdapter.bindView(holder.itemView, context, cursor);
-            else
-                holder.itemView.setVisibility(View.GONE);
-        }
-        else{
-            Cursor cursor = cursorAdapter.getCursor();
-            cursor.moveToPosition(i);
-            if (cursor.getString(cursor.getColumnIndex("isfriend")).equalsIgnoreCase("false"))
-                cursorAdapter.bindView(holder.itemView, context, cursor);
-            else
-                holder.itemView.setVisibility(View.GONE);
-        }
-
-
-
-
-
+        Cursor cursor = cursorAdapter.getCursor();
+        cursor.moveToPosition(i);
+        cursorAdapter.bindView(holder.itemView, context, cursor);
 
 
 //        holder.mTextView.setText(mDataset.get(i));

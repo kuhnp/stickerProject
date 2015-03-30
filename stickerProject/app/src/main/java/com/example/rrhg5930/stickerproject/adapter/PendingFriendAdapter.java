@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.example.rrhg5930.stickerproject.R;
 import com.example.rrhg5930.stickerproject.StickerApp;
 import com.example.rrhg5930.stickerproject.StickerConfig;
+import com.example.rrhg5930.stickerproject.asynctask.AcceptFriendTask;
 import com.example.rrhg5930.stickerproject.util.StickerUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -42,6 +43,7 @@ public class PendingFriendAdapter extends RecyclerView.Adapter<PendingFriendAdap
 
     private Uri fileUri;
     public static String mImagePath;
+    private String name;
     private boolean isPicturechosen = false;
 
 
@@ -53,6 +55,8 @@ public class PendingFriendAdapter extends RecyclerView.Adapter<PendingFriendAdap
         public ImageView mImageView;
         public View v1;
 
+
+
         public PendingViewHolder(View v) {
             super(v);
             v1 = itemView.findViewById(R.id.card_view);
@@ -61,7 +65,7 @@ public class PendingFriendAdapter extends RecyclerView.Adapter<PendingFriendAdap
 //            mImageView = (ImageView) v.findViewById(R.id.friendListIV);
         }
     }
-    public PendingFriendAdapter(ArrayList<String> myDataset, final boolean isPending, StickerApp application, SharedPreferences sharedPreferences, Context context, Cursor c) {
+    public PendingFriendAdapter(ArrayList<String> myDataset, final boolean isPending, final StickerApp application, final SharedPreferences sharedPreferences, Context context, Cursor c) {
 
         //mDataset = myDataset;
         this.isPending = isPending;
@@ -76,7 +80,7 @@ public class PendingFriendAdapter extends RecyclerView.Adapter<PendingFriendAdap
             }
 
             @Override
-            public void bindView(View view, Context context, Cursor cursor) {
+            public void bindView(View view, final Context context, Cursor cursor) {
 
                 PendingViewHolder holder = (PendingViewHolder) view.getTag();
                 if (holder == null)
@@ -84,9 +88,21 @@ public class PendingFriendAdapter extends RecyclerView.Adapter<PendingFriendAdap
 
                 holder.mTextView = (TextView) view.findViewById(R.id.list_item_string);
                 holder.mImageView = (ImageView) view.findViewById(R.id.friendListIV);
-                holder.mButton = (Button) view.findViewById(R.id.addFriendB);
-                String name = cursor.getString(cursor.getColumnIndex("name"));
+                holder.mButton = (Button) view.findViewById(R.id.add_btn);
+                name = cursor.getString(cursor.getColumnIndex("name"));
                 holder.mTextView.setText(Html.fromHtml(name));
+                if(cursor.getString(cursor.getColumnIndex("fromuser")).equalsIgnoreCase("true")){
+                    holder.mButton.setVisibility(View.GONE);
+                }
+                else{
+                    holder.mButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AcceptFriendTask acceptFriendTask = new AcceptFriendTask(application, sharedPreferences, context, name);
+                            acceptFriendTask.execute();
+                        }
+                    });
+                }
 
                 //imageLoader.displayImage(StickerConfig.PARAM_URL + "/sticker/" + name, holder.mImageView);
 
