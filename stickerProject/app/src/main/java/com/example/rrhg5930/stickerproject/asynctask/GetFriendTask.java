@@ -30,8 +30,9 @@ public class GetFriendTask extends AsyncTask<URL, Integer, Long> {
     StickerApp application;
     SharedPreferences sharedPref;
     Context context;
-    ArrayList friendList;
-    ArrayList pendingFriendList;
+    ArrayList<String> friendList;
+    ArrayList<String> pendingFriendList;
+    ArrayList<String> pendingFriendListFromUser;
 
     public GetFriendTask(StickerApp application, SharedPreferences sharedPreferences, Context context){
         this.application = application;
@@ -52,6 +53,7 @@ public class GetFriendTask extends AsyncTask<URL, Integer, Long> {
             JSONObject friend = null;
             friendList = new ArrayList<String>();
             pendingFriendList = new ArrayList<String>();
+            pendingFriendListFromUser = new ArrayList<String>();
             try {
                 friendArray = response.getJSONArray("friends");
             } catch (JSONException e1) {
@@ -71,13 +73,13 @@ public class GetFriendTask extends AsyncTask<URL, Integer, Long> {
                     String isFriend = friend.getString("isFriend");
                     String fromUser = friend.getString("fromUser");
 
-
-
                     if(isFriend.equalsIgnoreCase("true"))
-                        user.addFriend(username);
+                        friendList.add(username);
 
                     else if (isFriend.equalsIgnoreCase("false") && fromUser.equalsIgnoreCase("false"))
-                        user.addPendingFriend(username);
+                        pendingFriendList.add(username);
+                    else if (isFriend.equalsIgnoreCase("false") && fromUser.equalsIgnoreCase("true"))
+                        pendingFriendListFromUser.add(username);
 
 
                 } catch (JSONException e1) {
@@ -95,12 +97,29 @@ public class GetFriendTask extends AsyncTask<URL, Integer, Long> {
     protected void onPostExecute(Long result) {
         //save in db
         User user = User.getInstance();
-        ArrayList<String> f = user.friendList;
-        for(int i = 0; i <= friendList.size(); i++){
+
+        for(int i = 0; i < friendList.size(); i++){
             ContentValues values = new ContentValues();
-            values.put("name", f.get(i));
+            values.put("name", friendList.get(i));
+            values.put("isfriend", "true");
+            values.put("fromuser","true");
             context.getContentResolver().insert(StickerContentProvider.FRIENDS_CONTENT_URI,values);
         }
+        for(int i = 0; i < pendingFriendList.size(); i++){
+            ContentValues values = new ContentValues();
+            values.put("name", pendingFriendList.get(i));
+            values.put("isfriend", "false");
+            values.put("fromuser","false");
+            context.getContentResolver().insert(StickerContentProvider.FRIENDS_CONTENT_URI,values);
+        }
+        for(int i = 0; i < pendingFriendListFromUser.size(); i++){
+            ContentValues values = new ContentValues();
+            values.put("name", pendingFriendListFromUser.get(i));
+            values.put("isfriend", "false");
+            values.put("fromuser","true");
+            context.getContentResolver().insert(StickerContentProvider.FRIENDS_CONTENT_URI,values);
+        }
+
 
         Intent intent = new Intent(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

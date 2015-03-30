@@ -70,10 +70,15 @@ public class AcceptFriendTask extends AsyncTask<URL, Integer, Long> {
             toast.show();
         }
         else{
-            //save  friend in db
+            //update friendship in db
             ContentValues values = new ContentValues();
             values.put("name", friendName);
-            context.getContentResolver().insert(StickerContentProvider.FRIENDS_CONTENT_URI,values);
+            values.put("isFriend","true");
+            values.put("fromuser","true");
+            String selection = "name = ?";
+            String[] params = new String[1];
+            params[0] = friendName;
+            context.getContentResolver().update(StickerContentProvider.FRIENDS_CONTENT_URI, values, selection, params);
         }
     }
 }

@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.example.rrhg5930.stickerproject.adapter.FriendAdapter;
 import com.example.rrhg5930.stickerproject.adapter.TabsPagerAdapter;
 import com.example.rrhg5930.stickerproject.fragment.FriendListFragment;
 import com.example.rrhg5930.stickerproject.fragment.MainStickerFragment;

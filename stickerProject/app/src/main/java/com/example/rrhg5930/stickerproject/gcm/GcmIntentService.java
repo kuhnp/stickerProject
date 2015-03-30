@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +20,7 @@ import com.example.rrhg5930.stickerproject.MainActivity;
 import com.example.rrhg5930.stickerproject.R;
 import com.example.rrhg5930.stickerproject.StickerApp;
 import com.example.rrhg5930.stickerproject.StickerConfig;
+import com.example.rrhg5930.stickerproject.database.StickerContentProvider;
 import com.example.rrhg5930.stickerproject.gcm.GcmBroadcastReceiver;
 import com.example.rrhg5930.stickerproject.util.StickerUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -89,10 +91,25 @@ public class GcmIntentService extends IntentService {
 
                 else if(type.equalsIgnoreCase("friendRequest")){
                     sendNotification("New friend Request! From "+fromUser);
+                    // save new friend in db
+                    ContentValues values = new ContentValues();
+                    values.put("name", fromUser);
+                    values.put("isFriend","false");
+                    values.put("fromuser","false");
+                    getApplicationContext().getContentResolver().insert(StickerContentProvider.FRIENDS_CONTENT_URI,values);
                 }
 
                 else if(type.equalsIgnoreCase("friendRequestAccepted")){
                     sendNotification(""+fromUser+" has accepted your invitation");
+                    // update friendship in db
+                    ContentValues values = new ContentValues();
+                    values.put("name", fromUser);
+                    values.put("isFriend","true");
+                    values.put("fromuser","false");
+                    String selection = "name = ?";
+                    String[] params = new String[1];
+                    params[0] = fromUser;
+                    getApplicationContext().getContentResolver().update(StickerContentProvider.FRIENDS_CONTENT_URI, values, selection, params);
                 }
 
 

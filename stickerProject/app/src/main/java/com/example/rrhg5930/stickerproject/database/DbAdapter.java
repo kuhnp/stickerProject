@@ -38,10 +38,14 @@ public class DbAdapter {
         return res;
     }
 
+    public long updateFriendship(ContentValues values, String whereClause, String[] whereArgs){
+        return database.update(DATABASE_FRIENDS, values, whereClause, whereArgs);
+    }
+
     public Cursor getAllFriends(String selection, String[] selectionArgs, String order){
         Log.d("Content Provider", "Before query");
         Cursor mCursor = database.query(true,DATABASE_FRIENDS, new String[] {
-                "_id","name"
+                "_id","name","isfriend","fromuser"
         },selection,selectionArgs,null,null,order,null);
         Log.d("Content Provider", "After query, cursor size = "+mCursor.getCount());
         return mCursor;

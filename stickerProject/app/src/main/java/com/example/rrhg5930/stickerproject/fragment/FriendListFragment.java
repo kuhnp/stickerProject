@@ -17,11 +17,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
-import com.example.rrhg5930.stickerproject.FriendAdapter;
+import com.example.rrhg5930.stickerproject.adapter.FriendAdapter;
 import com.example.rrhg5930.stickerproject.R;
 import com.example.rrhg5930.stickerproject.StickerApp;
+import com.example.rrhg5930.stickerproject.adapter.PendingFriendAdapter;
 import com.example.rrhg5930.stickerproject.asynctask.AddFriendTask;
-import com.example.rrhg5930.stickerproject.database.DbAdapter;
 import com.example.rrhg5930.stickerproject.database.StickerContentProvider;
 import com.example.rrhg5930.stickerproject.model.User;
 
@@ -54,6 +54,8 @@ public class FriendListFragment extends Fragment {
     private User user;
 
     private boolean tmp = false;
+    String whereClause;
+    String[] whereArgs;
 
     public FriendListFragment(Context context){
         this.context = context;
@@ -63,11 +65,9 @@ public class FriendListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 
-        String whereClause ="name = ?";
-        String[] whereArgs = new String[] {
-                "g3"
-        };
-        Cursor c = context.getContentResolver().query(StickerContentProvider.FRIENDS_CONTENT_URI, null, null, null, null);
+
+
+
 //        String a = null;
 //        c.moveToNext();
 //        if (c.getCount() >  1) {
@@ -96,6 +96,11 @@ public class FriendListFragment extends Fragment {
         friendListLayoutManager = new LinearLayoutManager(getActivity());
         friendListRecyclerView.setLayoutManager(friendListLayoutManager);
 
+        whereClause ="isfriend = ?";
+        whereArgs = new String[] {
+                "true"
+        };
+        Cursor c = context.getContentResolver().query(StickerContentProvider.FRIENDS_CONTENT_URI, null, whereClause, whereArgs, null);
         friendListAdapter = new FriendAdapter(friendList, false, application, sharedPreferences, context, c);
         friendListRecyclerView.setAdapter(friendListAdapter);
 
@@ -108,7 +113,14 @@ public class FriendListFragment extends Fragment {
         pendingFriendListLayoutManager = new LinearLayoutManager(getActivity());
         pendindFriendListRecyclerView.setLayoutManager(pendingFriendListLayoutManager);
 
-        pendingFriendListAdapter = new FriendAdapter(pendingFriendList, true, application, sharedPreferences, context, c);
+
+        whereClause ="isfriend = ?";
+        whereArgs = new String[] {
+                "false"
+        };
+        Cursor c1 = context.getContentResolver().query(StickerContentProvider.FRIENDS_CONTENT_URI, null, whereClause, whereArgs, null);
+
+        pendingFriendListAdapter = new PendingFriendAdapter(pendingFriendList, true, application, sharedPreferences, context, c1);
         pendindFriendListRecyclerView.setAdapter(pendingFriendListAdapter);
 
         addFriendLayout = (RelativeLayout) rootView.findViewById(R.id.addFriendLayout);
@@ -122,7 +134,7 @@ public class FriendListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (!tmp) {
-                    if(pendingFriendList.size() != 0) {
+                    if(pendindFriendListRecyclerView.getChildCount() !=  0) {
                         pendindFriendListRecyclerView.setVisibility(View.VISIBLE);
                         Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.abc_slide_in_bottom);
                         pendindFriendListRecyclerView.startAnimation(animation);
@@ -133,7 +145,7 @@ public class FriendListFragment extends Fragment {
                     addFriendLayout.startAnimation(animation2);
                     tmp = true;
                 } else {
-                    pendindFriendListRecyclerView.setVisibility(View.GONE);
+                    pendindFriendListRecyclerView.setVisibility(View.INVISIBLE);
                     addFriendLayout.setVisibility(View.GONE);
                     friendListRecyclerView.setVisibility(View.VISIBLE);
                     tmp = false;

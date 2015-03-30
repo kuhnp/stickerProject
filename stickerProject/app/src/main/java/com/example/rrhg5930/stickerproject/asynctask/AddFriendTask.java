@@ -1,11 +1,13 @@
 package com.example.rrhg5930.stickerproject.asynctask;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.example.rrhg5930.stickerproject.StickerApp;
+import com.example.rrhg5930.stickerproject.database.StickerContentProvider;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,6 +56,14 @@ public class AddFriendTask extends AsyncTask<URL, Integer, Long> {
         if(err == 1){
             Toast toast = Toast.makeText(context,"Error when inviting friends",Toast.LENGTH_LONG);
             toast.show();
+        }
+        else{
+            //save friend in db
+            ContentValues values = new ContentValues();
+            values.put("name", friendName);
+            values.put("isFriend","false");
+            values.put("fromuser","true");
+            context.getContentResolver().insert(StickerContentProvider.FRIENDS_CONTENT_URI,values);
         }
 
     }

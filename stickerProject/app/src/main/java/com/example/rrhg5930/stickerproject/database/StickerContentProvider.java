@@ -52,6 +52,8 @@ public class StickerContentProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        database.updateFriendship(values, selection, selectionArgs);
+        getContext().getContentResolver().notifyChange(uri, null);
         return 0;
     }
 }
