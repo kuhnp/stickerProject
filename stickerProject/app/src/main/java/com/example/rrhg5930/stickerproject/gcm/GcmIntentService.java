@@ -82,7 +82,7 @@ public class GcmIntentService extends IntentService {
                 if(type.equalsIgnoreCase("postSticker")) {
 
                     String url = StickerConfig.PARAM_URL+"/sticker";
-                    String imagePath = StickerUtil.downloadFile(url, getApplicationContext(), sharedPreferences.getString("token", ""));
+                    String imagePath = StickerUtil.downloadFile(url, getApplicationContext(), sharedPreferences.getString("token", ""), sharedPreferences.getString("username",""));
                     e.putString("imagePath", imagePath);
                     e.commit();
                     sendNotification("New post on your sticker! by"+fromUser);

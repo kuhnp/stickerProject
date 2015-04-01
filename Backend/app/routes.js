@@ -5,6 +5,7 @@ var jwt             = require("../node_modules/jsonwebtoken");
 var multer          = require('../node_modules/multer');
 var randomstring    = require("randomstring");
 var gcm             = require('node-gcm');
+var fs              = require('fs');
 
 module.exports = function(app, passport) {
 
@@ -404,7 +405,12 @@ app.get('/sticker', ensureAuthorized,function(req,res){
     var username = decode.username;
     console.log('sticker request for '+username);
 
-    res.sendfile('/Users/pierre/Documents/Git/stickerProject/Backend/uploads/'+username+'.jpg');
+    if(fs.existsSync('/Users/pierre/Documents/Git/stickerProject/Backend/uploads/'+username+'.jpg'))
+        res.sendfile('/Users/pierre/Documents/Git/stickerProject/Backend/uploads/'+username+'.jpg');
+    else{
+        console.log('Send default picture');
+        res.sendfile('/Users/pierre/Documents/Git/stickerProject/Backend/uploads/defaultimage.jpg');
+    }
 
 });
 
@@ -415,16 +421,21 @@ app.get('/sticker/:user_id', ensureAuthorized,function(req,res){
     var username = decode.username;
     console.log('sticker request for '+req.params.user_id);
 
-
-    res.sendfile('/Users/pierre/Documents/Git/stickerProject/Backend/uploads/'+req.params.user_id+'.jpg');
+    if(fs.existsSync('/Users/pierre/Documents/Git/stickerProject/Backend/uploads/'+req.params.user_id+'.jpg')){
+        res.sendfile('/Users/pierre/Documents/Git/stickerProject/Backend/uploads/'+req.params.user_id+'.jpg');
+    }
+    else{
+        console.log('Send default picture');
+        res.sendfile('/Users/pierre/Documents/Git/stickerProject/Backend/uploads/defaultimage.jpg');
+    }
 
 });
 
 
 app.post('/notificationId', ensureAuthorized,function(req,res){
-    console.log('received new registration id');
     var decode = jwt.verify(req.token,process.env.JWT_SECRET);
     var username = decode.username;
+    console.log('username = '+username);
     User.findOne({'username': username},function(err,user){
         if (err) {
             res.json({

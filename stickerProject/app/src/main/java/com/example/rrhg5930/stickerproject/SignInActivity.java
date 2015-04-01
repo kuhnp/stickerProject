@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.rrhg5930.stickerproject.asynctask.GetFriendTask;
 import com.example.rrhg5930.stickerproject.model.User;
+import com.example.rrhg5930.stickerproject.util.StickerUtil;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
@@ -134,9 +135,12 @@ public class SignInActivity extends ActionBarActivity {
                     if(token == null)
                         err =1;
                     else{
-                        e.putString("token", token.toString());
+                        e.putString("token", token);
                         e.putString("username", mUsername);
                         e.putBoolean("isLoggedIn",true);
+                        String url = StickerConfig.PARAM_URL+"/sticker";
+                        String imagePath = StickerUtil.downloadFile(url, getApplicationContext(), token, mUsername);
+                        e.putString("imagePath",imagePath);
                         e.commit();
                         Log.d("SignIn", "token = " + token);
                         err = 0;
@@ -158,6 +162,7 @@ public class SignInActivity extends ActionBarActivity {
         protected void onPostExecute(Long result) {
 
             if(err == 0) {
+
 
                 GetFriendTask getFriendTask = new GetFriendTask(application, sharedPref, SignInActivity.this);
                 getFriendTask.execute();

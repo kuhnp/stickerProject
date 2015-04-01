@@ -52,6 +52,7 @@ public class StickerApp extends Application{
                 .cacheOnDisk(true)
                 .extraForDownloader(headers)
                 .cacheInMemory(true)
+                .showImageForEmptyUri(R.drawable.image_fun)
                 .build();
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         float density = metrics.density;

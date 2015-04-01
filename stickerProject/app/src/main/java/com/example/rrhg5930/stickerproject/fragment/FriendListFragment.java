@@ -1,8 +1,10 @@
 package com.example.rrhg5930.stickerproject.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,8 +19,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.example.rrhg5930.stickerproject.MainActivity;
 import com.example.rrhg5930.stickerproject.adapter.FriendAdapter;
 import com.example.rrhg5930.stickerproject.R;
 import com.example.rrhg5930.stickerproject.StickerApp;
@@ -35,11 +39,20 @@ import java.util.ArrayList;
  */
 public class FriendListFragment extends Fragment {
 
+    OnHeadlineSelectedListener mCallback;
+
+    public interface OnHeadlineSelectedListener {
+        public void onArticleSelected(int position);
+    }
+
+
+
+
     private StickerApp application;
     private SharedPreferences sharedPreferences;
     private Context context;
 
-    private RecyclerView friendListRecyclerView;
+    public RecyclerView friendListRecyclerView;
     private RecyclerView pendindFriendListRecyclerView;
     private RecyclerView.Adapter friendListAdapter;
     private RecyclerView.Adapter pendingFriendListAdapter;
@@ -62,6 +75,7 @@ public class FriendListFragment extends Fragment {
 
     public FriendListFragment(Context context){
         this.context = context;
+
     }
 
     @Override
@@ -84,7 +98,7 @@ public class FriendListFragment extends Fragment {
             public void handleMessage(Message msg) {
                 // When data change, reset both recycler views with new data
                 c = findFriendinDb();
-                friendListAdapter = new FriendAdapter(friendList, false, application, sharedPreferences, context, c);
+                friendListAdapter = new FriendAdapter(false, application, sharedPreferences, context, c);
                 friendListRecyclerView.setAdapter(friendListAdapter);
 
                 c1 = findPendingFriendinDb();
@@ -107,8 +121,9 @@ public class FriendListFragment extends Fragment {
 
         // Query db for friends
         c = findFriendinDb();
-        friendListAdapter = new FriendAdapter(friendList, false, application, sharedPreferences, context, c);
+        friendListAdapter = new FriendAdapter(false, application, sharedPreferences, context, c);
         friendListRecyclerView.setAdapter(friendListAdapter);
+
 
 
 
@@ -168,6 +183,11 @@ public class FriendListFragment extends Fragment {
 
     }
 
+    public void updateFragment(int position, Uri uri){
+        View v = this.friendListRecyclerView.getChildAt(position);
+        ImageView iv = (ImageView) v.findViewById(R.id.friendListIV);
+        iv.setImageURI(uri);
+    }
 
     Cursor findFriendinDb(){
         String whereClause ="isfriend = ?";
@@ -185,5 +205,10 @@ public class FriendListFragment extends Fragment {
         };
         Cursor cursor = context.getContentResolver().query(StickerContentProvider.FRIENDS_CONTENT_URI, null, whereClause, whereArgs, null);
         return cursor;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
     }
 }

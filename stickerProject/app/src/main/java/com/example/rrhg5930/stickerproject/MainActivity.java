@@ -48,7 +48,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
+public class MainActivity extends ActionBarActivity implements ActionBar.TabListener, FriendListFragment.OnHeadlineSelectedListener {
+
 
     private static String TAG = "Main activity";
 
@@ -75,6 +76,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     // friend Activity
     ArrayList<String> friendList;
     ArrayList<String> pendingFriendList;
+    private int position;
+    private FriendListFragment mFriendFrag;
 
 
     @Override
@@ -94,8 +97,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         application.setupImageLoader(headers);
 
         ArrayList<Fragment> fragments = new ArrayList<>();
-        fragments.add(new MainStickerFragment());
-        fragments.add(new FriendListFragment(MainActivity.this));
+        mFriendFrag = new FriendListFragment(MainActivity.this);
+        fragments.add(new MainStickerFragment(MainActivity.this));
+        fragments.add(mFriendFrag);
 
         TabsPagerAdapter tabsPagerAdapter = new TabsPagerAdapter(getSupportFragmentManager(),fragments);
         mViewpager.setAdapter(tabsPagerAdapter);
@@ -220,7 +224,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             Uri imageUri = result.getData();
             mImagePath = StickerUtil.getRealPathFromURI(imageUri,getApplicationContext());
 
-            FriendAdapter.mImagePath = mImagePath;
+            //updateFriendFragment(mImagePath, position);
+
+            onArticleSelected(position);
+
+
+
+
             //mImagePath = result.getData();
 
             //mainImage.setImageURI(mImagePath);
@@ -238,7 +248,11 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     }
 
-        public void downloadFile(String uRl) {
+    private void updateFriendFragment(String mImagePath, int position) {
+
+    }
+
+    public void downloadFile(String uRl) {
             File direct = new File(Environment.getExternalStorageDirectory()
                     + "/AnhsirkDasarp");
 
@@ -298,6 +312,18 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
 
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    @Override
+    public void onArticleSelected(int position) {
+        //FriendListFragment friendListFragment = (FriendListFragment) getSupportFragmentManager().findFragmentById(R.id.friendListIV);
+        //friendListFragment.updateFragment(position,Uri.parse(mImagePath));
+
+        mFriendFrag.updateFragment(position, Uri.parse(mImagePath));
     }
 
     public class GetFriendTask extends AsyncTask<URL, Integer, Long> {
@@ -376,9 +402,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         }
         return true;
     }
-
-
-
 
 
     public void goToFriendActivity(ArrayList friendList) {

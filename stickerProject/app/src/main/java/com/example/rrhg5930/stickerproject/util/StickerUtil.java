@@ -152,7 +152,7 @@ public class StickerUtil {
     }
 
 
-    public static String downloadFile(String uRl, Context context, String token) {
+    public static String downloadFile(String uRl, Context context, String token, String username) {
 
         /*********** Open shared preferences ************/
         SharedPreferences sharedPreferences;
@@ -166,7 +166,7 @@ public class StickerUtil {
         }
 
         /*********** Delete previous picture ************/
-        File pic = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/stickerAppReceived/"+sharedPreferences.getString("username","")+".jpg");
+        File pic = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/stickerAppReceived/"+username+".jpg");
         if(pic.exists())
             pic.delete();
 
@@ -200,12 +200,12 @@ public class StickerUtil {
                 .setAllowedOverRoaming(false).setTitle("Demo")
                 .addRequestHeader("token",token)
                 .setDescription("Something useful. No, really.")
-                .setDestinationInExternalPublicDir("/stickerAppReceived", sharedPreferences.getString("username","") + ".jpg");
+                .setDestinationInExternalPublicDir("/stickerAppReceived", username+".jpg");
 
                         mgr.enqueue(request);
 
 
-        String path = direct.getPath()+"/"+sharedPreferences.getString("username","")+".jpg";
+        String path = direct.getPath()+"/"+username+".jpg";
         return path;
 
     }

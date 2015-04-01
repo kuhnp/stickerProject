@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.rrhg5930.stickerproject.MainActivity;
 import com.example.rrhg5930.stickerproject.R;
 import com.example.rrhg5930.stickerproject.StickerApp;
 import com.example.rrhg5930.stickerproject.StickerConfig;
@@ -38,12 +40,6 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
     private Context context;
     private boolean isPending;
     private String friendSelected;
-    private ArrayList<String> mDataset;
-
-    private Uri fileUri;
-    public static String mImagePath;
-    private boolean isPicturechosen = false;
-
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -52,15 +48,50 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         public Button mButton;
         public ImageView mImageView;
         public View v1;
+        int position;
+
 
         public ViewHolder(View v) {
             super(v);
             v1 = itemView.findViewById(R.id.card_view);
+            mImageView = (ImageView)v1.findViewById(R.id.friendListIV);
+            mTextView = (TextView)v1.findViewById(R.id.list_item_string);
+            mImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("FriendAdapter", "selected:"+mTextView.getText());
+                    chosePicture(v.getContext());
+                }
+            });
+        }
+
+        public void setPosition(int pos){
+            this.position = pos;
+        }
+
+
+        public void chosePicture(Context context){
+
+            Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT,null);
+            galleryIntent.setType("image/*");
+            galleryIntent.addCategory(Intent.CATEGORY_OPENABLE);
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//            fileUri = StickerUtil.getOutputMediaFileUri(StickerUtil.MEDIA_TYPE_IMAGE);
+//            //application.setCameraPath(fileUri.getPath());
+//            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,fileUri);
+
+            Intent chooser = new Intent(Intent.ACTION_CHOOSER);
+            chooser.putExtra(Intent.EXTRA_INTENT,galleryIntent);
+            chooser.putExtra(Intent.EXTRA_TITLE,"Choose a picture");
+            Intent[] intentArray = {cameraIntent};
+            chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS,intentArray);
+            ((MainActivity)context).setPosition(position);
+            ((Activity)context).startActivityForResult(chooser, 1);
+
         }
     }
-    public FriendAdapter(ArrayList<String> myDataset, final boolean isPending, StickerApp application, SharedPreferences sharedPreferences, Context context, Cursor c ) {
+    public FriendAdapter(final boolean isPending, StickerApp application, SharedPreferences sharedPreferences, Context context, Cursor c ) {
 
-        //mDataset = myDataset;
         this.isPending = isPending;
         this.application = application;
         this.sharedPreferences = sharedPreferences;
@@ -79,6 +110,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
                 if (holder == null)
                     holder = new ViewHolder(view);
 
+                holder.setPosition(cursor.getPosition());
                 holder.mTextView = (TextView) view.findViewById(R.id.list_item_string);
                 holder.mImageView = (ImageView) view.findViewById(R.id.friendListIV);
                 holder.mButton = (Button) view.findViewById(R.id.add_btn);
@@ -86,17 +118,17 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
                 holder.mTextView.setText(Html.fromHtml(name));
                 holder.mButton.setVisibility(View.GONE);
 
-                //imageLoader.displayImage(StickerConfig.PARAM_URL + "/sticker/" + name, holder.mImageView);
-//
+                imageLoader.displayImage(StickerConfig.PARAM_URL + "/sticker/" + name, holder.mImageView);
+
             }
         };
     }
 
-
     @Override
     public FriendAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.friendlistview, parent, false);
-        return new ViewHolder(v);
+        ViewHolder viewHolder = new ViewHolder(v);
+        return viewHolder;
     }
 
     @Override
@@ -145,32 +177,4 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         return cursorAdapter.getCount();
     }
 
-    public void chosePicture(){
-
-        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT,null);
-        galleryIntent.setType("image/*");
-        galleryIntent.addCategory(Intent.CATEGORY_OPENABLE);
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        fileUri = StickerUtil.getOutputMediaFileUri(StickerUtil.MEDIA_TYPE_IMAGE);
-        //application.setCameraPath(fileUri.getPath());
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,fileUri);
-
-        Intent chooser = new Intent(Intent.ACTION_CHOOSER);
-        chooser.putExtra(Intent.EXTRA_INTENT,galleryIntent);
-        chooser.putExtra(Intent.EXTRA_TITLE,"Choose a picture");
-        Intent[] intentArray = {cameraIntent};
-        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS,intentArray);
-
-        ((Activity)context).startActivityForResult(chooser, 1);
-
-    }
-
-    protected void onActivityResult(int requestCode,int resultCode,Intent result)
-    {
-        if((requestCode == 1) && (resultCode == ((Activity)context).RESULT_OK))
-        {
-            Uri imageUri = result.getData();
-            mImagePath = StickerUtil.getRealPathFromURI(imageUri,context);
-        }
-    }
 }
