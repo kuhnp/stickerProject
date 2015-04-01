@@ -3,6 +3,7 @@ package com.example.rrhg5930.stickerproject.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,11 +13,13 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -187,6 +190,16 @@ public class FriendListFragment extends Fragment {
         View v = this.friendListRecyclerView.getChildAt(position);
         ImageView iv = (ImageView) v.findViewById(R.id.friendListIV);
         iv.setImageURI(uri);
+        Resources r = context.getResources();
+        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,150,r.getDisplayMetrics());
+        int px2 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,80,r.getDisplayMetrics());
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(px, ViewGroup.LayoutParams.MATCH_PARENT);
+        params.setMargins(0,0,px2,0);
+        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        iv.setLayoutParams(params);
+        TranslateAnimation ta = new TranslateAnimation(px2,0,0,0);
+        ta.setDuration(500);
+        iv.startAnimation(ta);
     }
 
     Cursor findFriendinDb(){
