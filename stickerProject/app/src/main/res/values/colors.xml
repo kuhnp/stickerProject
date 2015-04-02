@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="main_color">#4c8fcc</color>
+    <color name="main_color">#00a96d</color>
     <color name="main_background">#4c01dfff</color>
     <color name="behind_image">#ff696767</color>
 

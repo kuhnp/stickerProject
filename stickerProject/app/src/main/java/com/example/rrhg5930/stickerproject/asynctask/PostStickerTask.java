@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.example.rrhg5930.stickerproject.MainActivity;
 import com.example.rrhg5930.stickerproject.StickerApp;
 
 import org.json.JSONException;
@@ -22,14 +23,16 @@ public class PostStickerTask extends AsyncTask<URL, Integer, Long> {
     private Context context;
     private String friendName;
     private String imagePath;
+    private int position;
     int err = 0;
 
-    public PostStickerTask(String name, String path, StickerApp application, SharedPreferences sharedPreferences, Context context){
+    public PostStickerTask(String name, String path, StickerApp application, SharedPreferences sharedPreferences, Context context, int position){
         this.friendName = name;
         this.imagePath = path;
         this.application = application;
         this.sharedPref = sharedPreferences;
         this.context = context;
+        this.position = position;
     }
 
     protected void onPreExecute() {
@@ -55,6 +58,9 @@ public class PostStickerTask extends AsyncTask<URL, Integer, Long> {
         if(err == 1){
             Toast toast = Toast.makeText(context,"Error when posting sticker",Toast.LENGTH_LONG);
             toast.show();
+        }
+        else{
+            ((MainActivity)context).setPosition(this.position);
         }
     }
 }

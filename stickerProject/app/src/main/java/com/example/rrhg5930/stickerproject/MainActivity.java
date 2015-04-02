@@ -62,7 +62,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     String regid;
     String SENDER_ID = StickerConfig.SENDER_ID;
 
-    private String mImagePath;
+    public static String mImagePath;
     //private Uri fileUri;
     ImageView mainImage;
     public StickerApp application;
@@ -248,8 +248,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     }
 
-    private void updateFriendFragment(String mImagePath, int position) {
-
+    private void updateFriendFragmentafterPost() {
+        mFriendFrag.updateFragmentAfterPost(position);
     }
 
     public void downloadFile(String uRl) {

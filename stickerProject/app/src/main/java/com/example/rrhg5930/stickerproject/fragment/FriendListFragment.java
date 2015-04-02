@@ -1,11 +1,13 @@
 package com.example.rrhg5930.stickerproject.fragment;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,6 +26,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.rrhg5930.stickerproject.MainActivity;
 import com.example.rrhg5930.stickerproject.adapter.FriendAdapter;
@@ -43,6 +46,8 @@ import java.util.ArrayList;
 public class FriendListFragment extends Fragment {
 
     OnHeadlineSelectedListener mCallback;
+
+
 
     public interface OnHeadlineSelectedListener {
         public void onArticleSelected(int position);
@@ -186,20 +191,35 @@ public class FriendListFragment extends Fragment {
 
     }
 
+
     public void updateFragment(int position, Uri uri){
         View v = this.friendListRecyclerView.getChildAt(position);
         ImageView iv = (ImageView) v.findViewById(R.id.friendListIV);
+        Button btn = (Button) v.findViewById(R.id.add_btn);
+        Button btn2 = (Button) v.findViewById(R.id.cancel_btn);
+        TextView tv = (TextView) v.findViewById(R.id.list_item_string);
         iv.setImageURI(uri);
+
         Resources r = context.getResources();
-        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,150,r.getDisplayMetrics());
+        int marginDpx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,20,r.getDisplayMetrics());
         int px2 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,80,r.getDisplayMetrics());
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(px, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.setMargins(0,0,px2,0);
-        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        iv.setLayoutParams(params);
-        TranslateAnimation ta = new TranslateAnimation(px2,0,0,0);
-        ta.setDuration(500);
-        iv.startAnimation(ta);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        //params.setMargins(0,0,0,0);
+        params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        params.setMargins(marginDpx,50,0,0);
+        tv.setLayoutParams(params);
+        //TranslateAnimation ta = new TranslateAnimation(0,0,100,0);
+        //ta.setDuration(3000);
+        //tv.startAnimation(ta);
+        btn.setVisibility(View.VISIBLE);
+        btn2.setVisibility(View.VISIBLE);
+
+
+    }
+
+    public void updateFragmentAfterPost(int position) {
+        View v = this.friendListRecyclerView.getChildAt(position);
     }
 
     Cursor findFriendinDb(){

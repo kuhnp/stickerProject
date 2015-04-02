@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -22,6 +23,7 @@ import com.example.rrhg5930.stickerproject.MainActivity;
 import com.example.rrhg5930.stickerproject.R;
 import com.example.rrhg5930.stickerproject.StickerApp;
 import com.example.rrhg5930.stickerproject.StickerConfig;
+import com.example.rrhg5930.stickerproject.asynctask.PostStickerTask;
 import com.example.rrhg5930.stickerproject.util.StickerUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -45,7 +47,8 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView mTextView;
-        public Button mButton;
+        public Button mButtonPost;
+        public Button mButtonCancel;
         public ImageView mImageView;
         public View v1;
         int position;
@@ -56,11 +59,21 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
             v1 = itemView.findViewById(R.id.card_view);
             mImageView = (ImageView)v1.findViewById(R.id.friendListIV);
             mTextView = (TextView)v1.findViewById(R.id.list_item_string);
+            mButtonPost = (Button)v1.findViewById(R.id.add_btn);
+            mButtonCancel = (Button)v1.findViewById(R.id.cancel_btn);
             mImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.d("FriendAdapter", "selected:"+mTextView.getText());
                     chosePicture(v.getContext());
+                }
+            });
+            mButtonPost.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PostStickerTask postStickerTask = new PostStickerTask(mTextView.getText().toString(), MainActivity.mImagePath,
+                            (StickerApp)v.getContext().getApplicationContext(), PreferenceManager.getDefaultSharedPreferences(v.getContext()), v.getContext(), position);
+                    postStickerTask.execute();
                 }
             });
         }
@@ -113,10 +126,12 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
                 holder.setPosition(cursor.getPosition());
                 holder.mTextView = (TextView) view.findViewById(R.id.list_item_string);
                 holder.mImageView = (ImageView) view.findViewById(R.id.friendListIV);
-                holder.mButton = (Button) view.findViewById(R.id.add_btn);
+                holder.mButtonPost = (Button) view.findViewById(R.id.add_btn);
+                holder.mButtonCancel = (Button) view.findViewById(R.id.cancel_btn);
                 String name = cursor.getString(cursor.getColumnIndex("name"));
                 holder.mTextView.setText(Html.fromHtml(name));
-                holder.mButton.setVisibility(View.GONE);
+                holder.mButtonPost.setVisibility(View.GONE);
+                holder.mButtonCancel.setVisibility(View.GONE);
 
                 imageLoader.displayImage(StickerConfig.PARAM_URL + "/sticker/" + name, holder.mImageView);
 

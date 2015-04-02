@@ -205,7 +205,7 @@ app.post('/friend',ensureAuthorized,function(req, res) {
 
                         
                             var message = new gcm.Message();
-                            var sender = new gcm.Sender('-A');
+                            var sender = new gcm.Sender('AIzaSyCqrLt7O9JRG1NnzQuDWR4LiosUmeOGf-A');
                             message.addData({
                                 messageType: 'friendRequest',
                                 senderUsername: username
@@ -269,7 +269,7 @@ app.post('/friendaccept', ensureAuthorized, function(req,res){
             friend.isFriend = 'true';
             friend.save(function(err,friendSaved){
                 var message = new gcm.Message();
-                var sender = new gcm.Sender('-A');
+                var sender = new gcm.Sender('AIzaSyCqrLt7O9JRG1NnzQuDWR4LiosUmeOGf-A');
                 message.addData({
                     messageType: 'friendRequestAccepted',
                     senderUsername: username
@@ -375,7 +375,7 @@ app.post('/sticker', ensureAuthorized, multer({dest: './uploads/', rename: funct
             if(usr){
                 regIds = usr.regId;
                 console.log('Dest is found, regId = '+regIds);
-                var sender = new gcm.Sender('-A');
+                var sender = new gcm.Sender('AIzaSyCqrLt7O9JRG1NnzQuDWR4LiosUmeOGf-A');
                 sender.send(message, regIds, function (err, result) {
                 if(err) 
                     console.log('error occured when sending');
