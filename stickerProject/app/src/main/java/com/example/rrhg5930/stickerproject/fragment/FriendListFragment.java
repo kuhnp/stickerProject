@@ -29,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.rrhg5930.stickerproject.MainActivity;
+import com.example.rrhg5930.stickerproject.StickerConfig;
 import com.example.rrhg5930.stickerproject.adapter.FriendAdapter;
 import com.example.rrhg5930.stickerproject.R;
 import com.example.rrhg5930.stickerproject.StickerApp;
@@ -37,6 +38,7 @@ import com.example.rrhg5930.stickerproject.asynctask.AddFriendTask;
 import com.example.rrhg5930.stickerproject.database.StickerContentProvider;
 import com.example.rrhg5930.stickerproject.model.User;
 import com.example.rrhg5930.stickerproject.observer.StickerContentObserver;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
@@ -215,11 +217,28 @@ public class FriendListFragment extends Fragment {
         btn.setVisibility(View.VISIBLE);
         btn2.setVisibility(View.VISIBLE);
 
-
     }
 
     public void updateFragmentAfterPost(int position) {
         View v = this.friendListRecyclerView.getChildAt(position);
+        ImageView iv = (ImageView) v.findViewById(R.id.friendListIV);
+        TextView tv = (TextView) v.findViewById(R.id.list_item_string);
+        Button btn = (Button) v.findViewById(R.id.add_btn);
+        Button btn2 = (Button) v.findViewById(R.id.cancel_btn);
+        String name = tv.getText().toString();
+        ImageLoader imageLoader = ImageLoader.getInstance();
+        imageLoader.displayImage(StickerConfig.PARAM_URL + "/sticker/" + name, iv);
+
+        Resources r = context.getResources();
+        int marginDpx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,20,r.getDisplayMetrics());
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.CENTER_VERTICAL);
+        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        params.setMargins(marginDpx,0,0,0);
+        tv.setLayoutParams(params);
+
+        btn.setVisibility(View.GONE);
+        btn2.setVisibility(View.GONE);
     }
 
     Cursor findFriendinDb(){

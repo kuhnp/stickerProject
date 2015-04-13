@@ -49,7 +49,6 @@ public class StickerApp extends Application{
 
     public void setupImageLoader(Map<String, String> headers){
         DisplayImageOptions options = new DisplayImageOptions.Builder()
-                .cacheOnDisk(true)
                 .extraForDownloader(headers)
                 .cacheInMemory(true)
                 .showImageForEmptyUri(R.drawable.image_fun)

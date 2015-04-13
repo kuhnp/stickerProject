@@ -248,7 +248,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     }
 
-    private void updateFriendFragmentafterPost() {
+    public void updateFriendFragmentafterPost() {
+
         mFriendFrag.updateFragmentAfterPost(position);
     }
 
