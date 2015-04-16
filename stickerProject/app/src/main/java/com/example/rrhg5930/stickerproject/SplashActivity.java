@@ -25,7 +25,9 @@ public class SplashActivity extends ActionBarActivity {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         application = (StickerApp) getApplicationContext();
         setContentView(R.layout.activity_splash);
-
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        getSupportActionBar().setDisplayShowHomeEnabled(false);
+        getSupportActionBar().hide();
 
         final boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn",false);
 
@@ -49,12 +51,12 @@ public class SplashActivity extends ActionBarActivity {
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_splash, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu_splash, menu);
+//        return true;
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

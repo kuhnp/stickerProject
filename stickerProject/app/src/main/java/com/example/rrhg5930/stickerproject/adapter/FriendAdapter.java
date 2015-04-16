@@ -157,12 +157,12 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
 //        friendSelected = mDataset.get(i);
 //
 //        if(isPending)
-//            holder.mButton.setText("Accepts");
+//            holder.mButtonAccept.setText("Accepts");
 //        else {
-//            holder.mButton.setText("Post");
+//            holder.mButtonAccept.setText("Post");
 //            imageLoader.displayImage(StickerConfig.PARAM_URL+"/sticker",holder.mImageView);
 //        }
-//        holder.mButton.setOnClickListener(new View.OnClickListener() {
+//        holder.mButtonAccept.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
 //                if(isPending){      // accept friend request
@@ -172,7 +172,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
 //                else{               // post a sticker
 //                    if(!isPicturechosen) {
 //                        chosePicture();
-//                        holder.mButton.setText("Post now");
+//                        holder.mButtonAccept.setText("Post now");
 //                        isPicturechosen = true;
 //                    }
 //                    else{

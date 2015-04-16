@@ -7,9 +7,6 @@
     android:gravity="center"
     android:layout_margin="4dp">
 
-
-
-
     <Button
         android:text="Click Me!"
         android:id="@+id/button"

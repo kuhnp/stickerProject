@@ -209,7 +209,7 @@ public class FriendListFragment extends Fragment {
         //params.setMargins(0,0,0,0);
         params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        params.setMargins(marginDpx,50,0,0);
+        params.setMargins(marginDpx,15,0,0);
         tv.setLayoutParams(params);
         //TranslateAnimation ta = new TranslateAnimation(0,0,100,0);
         //ta.setDuration(3000);
@@ -240,6 +240,7 @@ public class FriendListFragment extends Fragment {
         btn.setVisibility(View.GONE);
         btn2.setVisibility(View.GONE);
     }
+
 
     Cursor findFriendinDb(){
         String whereClause ="isfriend = ?";

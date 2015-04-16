@@ -30,13 +30,15 @@ public class AcceptFriendTask extends AsyncTask<URL, Integer, Long> {
     SharedPreferences sharedPref;
     Context context;
     String friendName;
+    private int position;
     int err = 0;
 
-    public AcceptFriendTask (StickerApp application, SharedPreferences sharedPreferences, Context context, String friendName){
+    public AcceptFriendTask (StickerApp application, SharedPreferences sharedPreferences, Context context, String friendName, int position){
         this.application = application;
         this.sharedPref = sharedPreferences;
         this.context = context;
         this.friendName = friendName;
+        this.position = position;
     }
 
     protected void onPreExecute() {

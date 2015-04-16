@@ -1,16 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center">
+    android:layout_height="match_parent">
+
 
     <ImageView
         android:layout_width="350dp"
-        android:layout_height="400dp"
+        android:layout_height="300dp"
         android:id="@+id/mainStickerIV"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
         android:src="@drawable/image_fun"
         />
 
-</LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/usernameTV"
+        android:layout_below="@+id/mainStickerIV"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="Nom"
+        android:textSize="40dp"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/logout_button"
+        android:layout_alignParentBottom="true"
+        android:textColor="#ffffff"
+        android:textSize="20dp"
+        android:text="LOGOUT"/>
+</RelativeLayout>

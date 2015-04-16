@@ -4,6 +4,7 @@
     <color name="main_color">#850eb01c</color>
     <color name="main_background">#4c01dfff</color>
     <color name="behind_image">#ff696767</color>
+    <color name="tab_color">#2C84E6</color>
 
 
 </resources>

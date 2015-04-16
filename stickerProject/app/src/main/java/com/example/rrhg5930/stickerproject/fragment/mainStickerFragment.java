@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 
 import com.example.rrhg5930.stickerproject.R;
@@ -38,6 +39,8 @@ public class MainStickerFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.main_sticker_layout, container, false);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
+        TextView textView = (TextView) rootView.findViewById(R.id.usernameTV);
+        textView.setText(sharedPreferences.getString("username",""));
         final ImageView imageView = (ImageView) rootView.findViewById(R.id.mainStickerIV);
         if(!sharedPreferences.getString("imagePath", "").isEmpty())
             imageView.setImageURI(Uri.parse(sharedPreferences.getString("imagePath","")));

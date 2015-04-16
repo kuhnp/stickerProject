@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -91,6 +92,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
         mViewpager = (ViewPager) findViewById(R.id.pager);
         mActionBar = getSupportActionBar();
+        //mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(false);
+        //mActionBar.setTitle(" ");
 
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("token",sharedPref.getString("token",""));
@@ -123,11 +127,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        ActionBar.Tab mTabMain = mActionBar.newTab().setText("My sticker").setTabListener(this);
-        ActionBar.Tab mTabFriend = mActionBar.newTab().setText("friends").setTabListener(this);
+        ActionBar.Tab mTabMain = mActionBar.newTab().setText("My Sticker").setTabListener(this);
+        ActionBar.Tab mTabFriend = mActionBar.newTab().setText("Friends").setTabListener(this);
         mActionBar.addTab(mTabMain);
         mActionBar.addTab(mTabFriend);
         mViewpager.setCurrentItem(0);
+        mActionBar.setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.tab_color)));
 
 
 
@@ -253,6 +258,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         mFriendFrag.updateFragmentAfterPost(position);
     }
 
+
+
     public void downloadFile(String uRl) {
             File direct = new File(Environment.getExternalStorageDirectory()
                     + "/AnhsirkDasarp");
@@ -277,13 +284,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.menu_main, menu);
+//        return super.onCreateOptionsMenu(menu);
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
