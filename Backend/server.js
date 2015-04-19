@@ -23,17 +23,12 @@ mongoose.connect('mongodb://localhost/stickerApp'); // connect to our database
 
 
 
-// configure app to use bodyParser()
-// this will let us get the data from a POST
+
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser());  //get information from html forms
-// app.use(multer({ dest: './uploads/',rename: function (fieldname, filename) {
-//             return filename.replace(/\W+/g, '-').toLowerCase();
-//         }}));
+app.use(bodyParser());  
 
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
-//app.use(express.bodyParser());
 
 app.use(express.static(__dirname + '/static'));
 app.set('view engine', 'ejs'); // set up ejs for templating
@@ -43,7 +38,7 @@ app.set('view engine', 'ejs'); // set up ejs for templating
 // routes ======================================================================
 require('./app/routes.js')(app); // load our routes and pass in our app and fully configured passport
 
-//var Bear     = require('./app/models/bear');
+
 
 var port = process.env.PORT || 8080;        // set our port
 

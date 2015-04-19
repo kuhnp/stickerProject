@@ -227,7 +227,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         if((requestCode == 1) && (resultCode == RESULT_OK))
         {
             Uri imageUri = result.getData();
-            mImagePath = StickerUtil.getRealPathFromURI(imageUri,getApplicationContext());
+            mImagePath = StickerUtil.getPathFromFragment(getApplicationContext(), imageUri);
 
             //updateFriendFragment(mImagePath, position);
 

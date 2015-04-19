@@ -7,4 +7,8 @@
     <color name="tab_color">#2C84E6</color>
 
 
+    <color name="pink">#f2ff2878</color>
+    <color name="pink_pressed">#ffa9003b</color>
+
+    <color name="white">#ffffff</color>
 </resources>

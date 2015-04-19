@@ -47,7 +47,7 @@ public class SplashActivity extends ActionBarActivity {
                     SplashActivity.this.finish();
                 }
             }
-        }, 4000);
+        }, 1000);
     }
 
 

@@ -1,38 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:background="#ffdfdfdf"
+    >
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="fill_parent"
         android:layout_height="495dp"
         android:id="@+id/friendRV"
         android:scrollbars="vertical"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="8dp"
         />
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="fill_parent"
-        android:layout_height="495dp"
+        android:layout_height="350dp"
         android:id="@+id/friendRV2"
         android:visibility="invisible"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="8dp"
 
         />
 
-    <Button
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/buttonFrien"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/buttonFrien"
-        android:text="Add"
+        fab:fab_addButtonColorNormal="@color/pink"
+        fab:fab_addButtonColorPressed="@color/pink_pressed"
+        fab:fab_addButtonPlusIconColor="#ffffff"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         />
+
+
+
+
+
+
+
+
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/buttonFrien"-->
+        <!--android:text="Add"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--/>-->
 
     <ImageView
         android:layout_width="fill_parent"
@@ -48,14 +70,17 @@
         android:layout_height="wrap_content"
         android:id="@+id/addFriendLayout"
         android:layout_above="@+id/buttonFrien"
-        android:visibility="gone">
+        android:visibility="gone"
+        >
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:id="@+id/addFriendET"
+            android:background="@drawable/add_friend_edit_text"
             android:editable="true"
-            android:hint="Add Friends"
+            android:hint="  Add Friends"
+            android:textColorHint="@color/white"
             android:textSize="25dp"
             />
         <Button

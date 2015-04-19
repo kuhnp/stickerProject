@@ -38,6 +38,8 @@ import com.example.rrhg5930.stickerproject.asynctask.AddFriendTask;
 import com.example.rrhg5930.stickerproject.database.StickerContentProvider;
 import com.example.rrhg5930.stickerproject.model.User;
 import com.example.rrhg5930.stickerproject.observer.StickerContentObserver;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -70,7 +72,7 @@ public class FriendListFragment extends Fragment {
     private ArrayList<String> pendingFriendList;
     private RecyclerView.LayoutManager friendListLayoutManager;
     private RecyclerView.LayoutManager pendingFriendListLayoutManager;
-    private Button showPendingFriendListButton;
+    private FloatingActionsMenu showPendingFriendListButton;
     private EditText addFriendEditText;
     private Button addFriendButton;
     private RelativeLayout addFriendLayout;
@@ -80,8 +82,6 @@ public class FriendListFragment extends Fragment {
     private User user;
     Cursor c;
     Cursor c1;
-
-    private boolean tmp = false;
 
     public FriendListFragment(Context context){
         this.context = context;
@@ -155,29 +155,29 @@ public class FriendListFragment extends Fragment {
 
 
         // Set the Button to show the pendingListFriend
-        showPendingFriendListButton = (Button) rootView.findViewById(R.id.buttonFrien);
-        showPendingFriendListButton.setOnClickListener(new View.OnClickListener() {
+        showPendingFriendListButton = (FloatingActionsMenu) rootView.findViewById(R.id.buttonFrien);
+
+
+        showPendingFriendListButton.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
             @Override
-            public void onClick(View v) {
-                if (!tmp) {
-                    if(pendindFriendListRecyclerView.getChildCount() !=  0) {
-                        pendindFriendListRecyclerView.setVisibility(View.VISIBLE);
-                        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.abc_slide_in_bottom);
-                        pendindFriendListRecyclerView.startAnimation(animation);
-                        friendListRecyclerView.setVisibility(View.INVISIBLE);
-                    }
-                    addFriendLayout.setVisibility(View.VISIBLE);
-                    Animation animation2 = AnimationUtils.loadAnimation(getActivity(), R.anim.abc_slide_in_bottom);
-                    addFriendLayout.startAnimation(animation2);
-                    tmp = true;
-                } else {
-                    pendindFriendListRecyclerView.setVisibility(View.INVISIBLE);
-                    addFriendLayout.setVisibility(View.GONE);
-                    friendListRecyclerView.setVisibility(View.VISIBLE);
-                    tmp = false;
+            public void onMenuExpanded() {
+
+                if (pendindFriendListRecyclerView.getChildCount() != 0) {
+                    pendindFriendListRecyclerView.setVisibility(View.VISIBLE);
+                    Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.abc_slide_in_bottom);
+                    pendindFriendListRecyclerView.startAnimation(animation);
+                    friendListRecyclerView.setVisibility(View.INVISIBLE);
                 }
+                addFriendLayout.setVisibility(View.VISIBLE);
+                Animation animation2 = AnimationUtils.loadAnimation(getActivity(), R.anim.abc_slide_in_bottom);
+                addFriendLayout.startAnimation(animation2);
+            }
 
-
+            @Override
+            public void onMenuCollapsed() {
+                pendindFriendListRecyclerView.setVisibility(View.INVISIBLE);
+                addFriendLayout.setVisibility(View.GONE);
+                friendListRecyclerView.setVisibility(View.VISIBLE);
             }
         });
 
@@ -227,6 +227,7 @@ public class FriendListFragment extends Fragment {
         Button btn2 = (Button) v.findViewById(R.id.cancel_btn);
         String name = tv.getText().toString();
         ImageLoader imageLoader = ImageLoader.getInstance();
+        imageLoader.cancelDisplayTask(iv);
         imageLoader.displayImage(StickerConfig.PARAM_URL + "/sticker/" + name, iv);
 
         Resources r = context.getResources();
