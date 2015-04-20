@@ -68,6 +68,7 @@ public class MainStickerFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //logout
+
                             }
 
                         } )

@@ -396,4 +396,39 @@ public class StickerRest {
 
     }
 
+    public JSONObject logout(String token){
+
+        String url = StickerConfig.PARAM_URL+"/logout";
+        JSONObject jsonObject = new JSONObject();
+        HttpClient httpClient = getSpecialClient();
+        HttpContext localContext = new BasicHttpContext();
+        HttpPost httpPost = new HttpPost(url);
+        try {
+            StringEntity se = new StringEntity(jsonObject.toString(), "UTF-8");
+            httpPost.setHeader("Content-type","application/json");
+            httpPost.setHeader("token",token);
+            httpPost.setEntity(se);
+            HttpResponse httpResponse = httpClient.execute(httpPost,localContext);
+            return parseAnswer(httpResponse);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+
+    }
+
 }
