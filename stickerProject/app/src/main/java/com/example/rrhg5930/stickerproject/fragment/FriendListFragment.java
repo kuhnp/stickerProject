@@ -57,9 +57,6 @@ public class FriendListFragment extends Fragment {
         public void onArticleSelected(int position);
     }
 
-
-
-
     private StickerApp application;
     private SharedPreferences sharedPreferences;
     private Context context;

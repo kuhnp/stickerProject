@@ -1,6 +1,5 @@
 var User            = require('../app/models/user');
 var Friend          = require('../app/models/friend');
-var jwt             = require("../node_modules/jsonwebtoken");
 var multer          = require('../node_modules/multer');
 var randomstring    = require("randomstring");
 var gcm             = require('node-gcm');
@@ -21,6 +20,8 @@ module.exports = function(app, passport) {
 
   app.post('/login', usersController.signin);
 
+  app.post('/logout', ensureAuthorized, usersController.logout);
+
   app.post('/friend',ensureAuthorized, friendsController.add);
 
   app.post('/friendaccept', ensureAuthorized, friendsController.accept);
@@ -34,7 +35,7 @@ module.exports = function(app, passport) {
     multer(
     {
       dest: './uploads/', rename: function (fieldname, filename) 
-      {
+      { 
         return filename.replace(/\W+/g, '-').toLowerCase();
       }
     }

@@ -23,6 +23,8 @@ import android.widget.TextView;
 
 
 import com.example.rrhg5930.stickerproject.R;
+import com.example.rrhg5930.stickerproject.StickerApp;
+import com.example.rrhg5930.stickerproject.asynctask.LogoutTask;
 
 /**
  * Created by pierre on 19/03/2015.
@@ -68,7 +70,8 @@ public class MainStickerFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //logout
-
+                                LogoutTask logoutTask = new LogoutTask((StickerApp)getActivity().getApplicationContext(), context, PreferenceManager.getDefaultSharedPreferences(context));
+                                logoutTask.execute();
                             }
 
                         } )

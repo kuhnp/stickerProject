@@ -41,7 +41,6 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
     private SharedPreferences sharedPreferences;
     private Context context;
     private boolean isPending;
-    private String friendSelected;
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -134,7 +133,6 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
                 holder.mButtonCancel.setVisibility(View.GONE);
 
                 imageLoader.displayImage(StickerConfig.PARAM_URL + "/sticker/" + name, holder.mImageView);
-
             }
         };
     }
@@ -151,38 +149,6 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         Cursor cursor = cursorAdapter.getCursor();
         cursor.moveToPosition(i);
         cursorAdapter.bindView(holder.itemView, context, cursor);
-
-
-//        holder.mTextView.setText(mDataset.get(i));
-//        friendSelected = mDataset.get(i);
-//
-//        if(isPending)
-//            holder.mButtonAccept.setText("Accepts");
-//        else {
-//            holder.mButtonAccept.setText("Post");
-//            imageLoader.displayImage(StickerConfig.PARAM_URL+"/sticker",holder.mImageView);
-//        }
-//        holder.mButtonAccept.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(isPending){      // accept friend request
-//                    AcceptFriendTask acceptFriendTask = new AcceptFriendTask(application, sharedPreferences, context, friendSelected);
-//                    acceptFriendTask.execute();
-//                }
-//                else{               // post a sticker
-//                    if(!isPicturechosen) {
-//                        chosePicture();
-//                        holder.mButtonAccept.setText("Post now");
-//                        isPicturechosen = true;
-//                    }
-//                    else{
-//
-//                        PostStickerTask postStickerTask = new PostStickerTask(friendSelected, mImagePath, application, sharedPreferences, context);
-//                        postStickerTask.execute();
-//                    }
-//                }
-//            }
-//        });
 
     }
 

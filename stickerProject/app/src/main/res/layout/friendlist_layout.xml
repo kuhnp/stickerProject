@@ -14,8 +14,7 @@
         android:scrollbars="vertical"
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="8dp"
-        />
+        android:layout_marginTop="8dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="fill_parent"
@@ -24,9 +23,7 @@
         android:visibility="invisible"
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="8dp"
-
-        />
+        android:layout_marginTop="8dp"/>
 
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
@@ -37,8 +34,7 @@
         fab:fab_addButtonColorPressed="@color/pink_pressed"
         fab:fab_addButtonPlusIconColor="#ffffff"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        />
+        android:layout_centerHorizontal="true"/>
 
 
 
@@ -70,9 +66,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/addFriendLayout"
         android:layout_above="@+id/buttonFrien"
-        android:visibility="gone"
-        >
-
+        android:visibility="gone">
         <EditText
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -91,11 +85,6 @@
             android:layout_alignParentRight="true"
             />
 
-
-
     </RelativeLayout>
-
-
-
 
 </RelativeLayout>

@@ -1,6 +1,6 @@
 var User            = require('./../models/user');
 var Friend          = require('./../models/friend');
-var jwt             = require("./../../node_modules/jsonwebtoken");
+var jwt             = require('jsonwebtoken');
 var gcm             = require('node-gcm');
 var config      = require('./../../../../config');
 

@@ -65,16 +65,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     public static String mImagePath;
     //private Uri fileUri;
-    ImageView mainImage;
     public StickerApp application;
     SharedPreferences sharedPref;
     SharedPreferences.Editor e;
     Button button;
-    Button bFriend;
     ImageLoader imLoader;
     public String url_temp = StickerConfig.PARAM_URL+"/sticker";
 
-    // friend Activity
     ArrayList<String> friendList;
     ArrayList<String> pendingFriendList;
     private int position;
@@ -135,25 +132,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         mActionBar.setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.tab_color)));
 
 
-
-
-
-
-        //imLoader.init(ImageLoaderConfiguration.createDefault(getApplicationContext()));
-
-        mainImage = (ImageView) findViewById(R.id.button);
-        bFriend = (Button) findViewById(R.id.bFriend);
-
         StickerUtil.createMediaDirectory();
-
-        bFriend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //GetFriendTask task = new GetFriendTask();
-                //task.execute();
-
-            }
-        });
 
         if(checkPlayServices()){
             gcm = GoogleCloudMessaging.getInstance(this);
@@ -172,53 +151,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         ComponentName thisWidget = new ComponentName(getApplicationContext(), ExampleAppWidgetProvider.class);
         int[] allWidgetIds2 = mAppWidgetManager.getAppWidgetIds(thisWidget);
 
-        // keep the default image if it has not been already set
-        if(sharedPref.getString("imagePath","")!= "")
-            mainImage.setImageURI(Uri.parse(sharedPref.getString("imagePath","")));
 
-
-
-        mainImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT,null);
-                galleryIntent.setType("image/*");
-                galleryIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                //fileUri = StickerUtil.getOutputMediaFileUri(StickerUtil.MEDIA_TYPE_IMAGE);
-                //application.setCameraPath(fileUri.getPath());
-               // cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,fileUri);
-
-                Intent chooser = new Intent(Intent.ACTION_CHOOSER);
-                chooser.putExtra(Intent.EXTRA_INTENT,galleryIntent);
-                chooser.putExtra(Intent.EXTRA_TITLE,"Choose a picture");
-                Intent[] intentArray = {cameraIntent};
-                chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS,intentArray);
-
-                startActivityForResult(chooser, 1);
-            }
-        });
-
-        button = (Button) findViewById(R.id.button2);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Map<String, String> headers = new HashMap<String, String>();
-                headers.put("token",sharedPref.getString("token",""));
-                application.setupImageLoader(headers);
-                imLoader = ImageLoader.getInstance();
-                //display the image from the url
-                imLoader.displayImage(url_temp,mainImage);
-
-
-        //save the image from url
-        //downloadFile(url_temp);
-
-
-
-            }
-        });
 
     }
 

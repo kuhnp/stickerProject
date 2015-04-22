@@ -1,6 +1,6 @@
 var User            = require('./../models/user');
 var Friend          = require('./../models/friend');
-var jwt             = require("./../../node_modules/jsonwebtoken");
+var jwt             = require('jsonwebtoken');
 var gcm             = require('node-gcm');
 var fs              = require('fs');
 var config      = require('./../../../../config');
@@ -54,7 +54,6 @@ module.exports.post = function(req, res) {
 }
 
 module.exports.get = function(req, res){
-  console.log('sticker request received');
   var decode = jwt.verify(req.token,process.env.JWT_SECRET);
   var username = decode.username;
   console.log('sticker request for '+username);
@@ -67,10 +66,8 @@ module.exports.get = function(req, res){
 }
 
 module.exports.getbyid = function(req, res){
-  console.log('sticker request received');
     var decode = jwt.verify(req.token,process.env.JWT_SECRET);
     var username = decode.username;
-    console.log('sticker request for '+req.params.user_id);
 
     if(fs.existsSync(config.localPath.uploadPath+req.params.user_id+'.jpg')){
         res.sendfile(config.localPath.uploadPath+req.params.user_id+'.jpg');

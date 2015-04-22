@@ -219,6 +219,27 @@ public class StickerUtil {
         }
     }
 
+    public static void deleteAppDataWhenLogin() {
+        File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/stickerAppReceived");
+        if(folder.exists()){
+            String[] children = folder.list();
+            for(int i = 0; i<children.length; i++){
+                new File(folder,children[i]).delete();
+            }
+        }
+    }
+    public static void deleteAppData(String username){
+
+        File pic = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/stickerAppReceived/"+username+".jpg");
+        if(pic.exists()) {
+            pic.delete();
+        }
+        File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/stickerAppReceived");
+        if(folder.exists()){
+           folder.delete();
+        }
+    }
+
 
     public static String downloadFile(String uRl, Context context, String token, String username) {
 

@@ -1,5 +1,5 @@
 var User            = require('./../models/user');
-var jwt             = require("./../../node_modules/jsonwebtoken");
+var jwt             = require('jsonwebtoken');
 
 
 
@@ -74,8 +74,8 @@ module.exports.signup = function(req, res){
                       console.log('Creating new user token...');
                       newUser.save(function(err,user){
                         user.token = jwt.sign(newUser, process.env.JWT_SECRET);
-                        var decode = jwt.verify(user.token,process.env.JWT_SECRET);
-                        console.log('decode.email = '+decode.email);
+                        // var decode = jwt.verify(user.token,process.env.JWT_SECRET);
+                        // console.log('decode.email = '+decode.email);
                         console.log('Done');
                         user.save(function(err,user1){
                           res.json({ 
@@ -124,4 +124,13 @@ module.exports.notificationid = function(req, res) {
       }
     }
   }); 
+}
+
+module.exports.logout = function(req, res) {
+  var decode = jwt.verify(req.token,process.env.JWT_SECRET);
+  var username = decode.username;
+  console.log(username +' just logged out');
+  res.json({
+    type: true
+  });
 }

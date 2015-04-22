@@ -50,4 +50,8 @@ public class DbAdapter {
         Log.d("Content Provider", "After query, cursor size = "+mCursor.getCount());
         return mCursor;
     }
+
+    public void cleanDatabase() {
+        this.database.delete(DATABASE_FRIENDS, null, null);
+    }
 }

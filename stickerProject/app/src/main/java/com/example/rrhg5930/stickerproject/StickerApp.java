@@ -111,5 +111,8 @@ public class StickerApp extends Application{
         e.commit();
     }
 
+    public void deletePreferences() {
+        PreferenceManager.getDefaultSharedPreferences(this).edit().clear().commit();
+    }
 
 }

@@ -19,8 +19,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
+            android:layout_height="match_parent">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -61,8 +60,7 @@
                     android:layout_marginRight="20dp"
                     android:background="@drawable/button_cancel2"
                     android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    />
+                    android:focusableInTouchMode="false"/>
 
             </RelativeLayout>
 
@@ -81,8 +79,7 @@
                     android:layout_gravity="center"
                     android:scaleType="fitXY"
                     android:src="@drawable/image_fun"
-                    android:id="@+id/friendListIV"
-                    />
+                    android:id="@+id/friendListIV"/>
 
             </FrameLayout>
 
