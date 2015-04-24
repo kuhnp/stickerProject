@@ -17,6 +17,7 @@ module.exports.post = function(req, res) {
   var message = new gcm.Message();
   message.addData('messageType', 'postSticker');
   message.addData('senderUsername',username);
+  message.addData('username',dest);
   var regIds ;
 
   User.findOne({'username': dest }, function(err,usr){

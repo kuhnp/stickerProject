@@ -78,44 +78,43 @@ public class GcmIntentService extends IntentService {
 
                 String fromUser = intent.getStringExtra("senderUsername");
                 String type = intent.getStringExtra("messageType");
+                String usernameReceived = intent.getStringExtra("username");
+                String username = sharedPreferences.getString("username", "");
+                if(usernameReceived.equalsIgnoreCase(username)) {
+                    if (type.equalsIgnoreCase("postSticker")) {
 
-                if(type.equalsIgnoreCase("postSticker")) {
+                        String url = StickerConfig.PARAM_URL + "/sticker";
+                        String imagePath = StickerUtil.downloadFile(url, getApplicationContext(), sharedPreferences.getString("token", ""), sharedPreferences.getString("username", ""));
+                        e.putString("imagePath", imagePath);
+                        e.commit();
+                        sendNotification("New post on your sticker! by" + fromUser);
 
-                    String url = StickerConfig.PARAM_URL+"/sticker";
-                    String imagePath = StickerUtil.downloadFile(url, getApplicationContext(), sharedPreferences.getString("token", ""), sharedPreferences.getString("username",""));
-                    e.putString("imagePath", imagePath);
-                    e.commit();
-                    sendNotification("New post on your sticker! by"+fromUser);
+                    } else if (type.equalsIgnoreCase("friendRequest")) {
+                        sendNotification("New friend Request! From " + fromUser);
+                        // save new friend in db
+                        ContentValues values = new ContentValues();
+                        values.put("name", fromUser);
+                        values.put("isFriend", "false");
+                        values.put("fromuser", "false");
+                        getApplicationContext().getContentResolver().insert(StickerContentProvider.FRIENDS_CONTENT_URI, values);
+                    } else if (type.equalsIgnoreCase("friendRequestAccepted")) {
+                        sendNotification("" + fromUser + " has accepted your invitation");
+                        // update friendship in db
+                        ContentValues values = new ContentValues();
+                        values.put("name", fromUser);
+                        values.put("isFriend", "true");
+                        values.put("fromuser", "false");
+                        String selection = "name = ?";
+                        String[] params = new String[1];
+                        params[0] = fromUser;
+                        getApplicationContext().getContentResolver().update(StickerContentProvider.FRIENDS_CONTENT_URI, values, selection, params);
+                    }
 
+
+                    // Post notification of received message.
+                    //sendNotification("Received: " + extras.toString());
+                    Log.i(TAG, "Received: " + extras.toString());
                 }
-
-                else if(type.equalsIgnoreCase("friendRequest")){
-                    sendNotification("New friend Request! From "+fromUser);
-                    // save new friend in db
-                    ContentValues values = new ContentValues();
-                    values.put("name", fromUser);
-                    values.put("isFriend","false");
-                    values.put("fromuser","false");
-                    getApplicationContext().getContentResolver().insert(StickerContentProvider.FRIENDS_CONTENT_URI,values);
-                }
-
-                else if(type.equalsIgnoreCase("friendRequestAccepted")){
-                    sendNotification(""+fromUser+" has accepted your invitation");
-                    // update friendship in db
-                    ContentValues values = new ContentValues();
-                    values.put("name", fromUser);
-                    values.put("isFriend","true");
-                    values.put("fromuser","false");
-                    String selection = "name = ?";
-                    String[] params = new String[1];
-                    params[0] = fromUser;
-                    getApplicationContext().getContentResolver().update(StickerContentProvider.FRIENDS_CONTENT_URI, values, selection, params);
-                }
-
-
-                // Post notification of received message.
-                //sendNotification("Received: " + extras.toString());
-                Log.i(TAG, "Received: " + extras.toString());
             }
         }
         // Release the wake lock provided by the WakefulBroadcastReceiver.

@@ -68,8 +68,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     public StickerApp application;
     SharedPreferences sharedPref;
     SharedPreferences.Editor e;
-    Button button;
-    ImageLoader imLoader;
     public String url_temp = StickerConfig.PARAM_URL+"/sticker";
 
     ArrayList<String> friendList;

@@ -13,6 +13,7 @@ import android.util.Log;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 import java.util.Map;
@@ -52,6 +53,7 @@ public class StickerApp extends Application{
                 .extraForDownloader(headers)
                 .cacheInMemory(true)
                 .showImageForEmptyUri(R.drawable.image_fun)
+                .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
                 .build();
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         float density = metrics.density;

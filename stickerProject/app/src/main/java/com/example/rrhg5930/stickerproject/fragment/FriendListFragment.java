@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -48,8 +49,6 @@ import java.util.ArrayList;
  * Created by pierre on 23/03/2015.
  */
 public class FriendListFragment extends Fragment {
-
-    OnHeadlineSelectedListener mCallback;
 
 
 
@@ -91,6 +90,8 @@ public class FriendListFragment extends Fragment {
         application = (StickerApp) getActivity().getApplicationContext();
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application.getApplicationContext());
+        View rootView = inflater.inflate(R.layout.friendlist_layout, container, false);
+        showPendingFriendListButton = (FloatingActionsMenu) rootView.findViewById(R.id.buttonFrien);
 
         friendList = new ArrayList<>();
         pendingFriendList = new ArrayList<>();
@@ -117,7 +118,7 @@ public class FriendListFragment extends Fragment {
         this.getActivity().getContentResolver().registerContentObserver(StickerContentProvider.FRIENDS_CONTENT_URI, true, contentObserver);
 
 
-        View rootView = inflater.inflate(R.layout.friendlist_layout, container, false);
+
 
         // Set the recyclerView with the list of friends
         friendListRecyclerView = (RecyclerView) rootView.findViewById(R.id.friendRV);
@@ -130,6 +131,17 @@ public class FriendListFragment extends Fragment {
         c = findFriendinDb();
         friendListAdapter = new FriendAdapter(false, application, sharedPreferences, context, c);
         friendListRecyclerView.setAdapter(friendListAdapter);
+
+        friendListRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE){
+                    showPendingFriendListButton.setVisibility(View.VISIBLE);
+                }
+                else
+                    showPendingFriendListButton.setVisibility(View.INVISIBLE);
+            }
+        });
 
 
 
@@ -152,7 +164,7 @@ public class FriendListFragment extends Fragment {
 
 
         // Set the Button to show the pendingListFriend
-        showPendingFriendListButton = (FloatingActionsMenu) rootView.findViewById(R.id.buttonFrien);
+
 
 
         showPendingFriendListButton.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {

@@ -47,7 +47,8 @@ module.exports.add = function(req, res) {
             var sender = new gcm.Sender(config.gcm.senderId);
             message.addData({
               messageType: 'friendRequest',
-              senderUsername: username                    
+              senderUsername: username,
+              username: req.body.friend                    
                             });
                             var regId = user.regId;
                             console.log('before sending, regId = '+regId);
@@ -98,7 +99,8 @@ module.exports.accept = function(req, res) {
                 var sender = new gcm.Sender(config.gcm.senderId);
                 message.addData({
                     messageType: 'friendRequestAccepted',
-                    senderUsername: username
+                    senderUsername: username,
+                    username: req.body.friend
                 });
                 User.findOne({'username':req.body.friend}, function(err2,user){
                     if(err2){
