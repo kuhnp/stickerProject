@@ -6,6 +6,8 @@
     <color name="behind_image">#ff696767</color>
     <color name="tab_color">#2C84E6</color>
 
+    <color name="main_grey_background">#E8EFF7</color>
+
 
     <color name="pink">#f2ff2878</color>
     <color name="pink_pressed">#ffa9003b</color>

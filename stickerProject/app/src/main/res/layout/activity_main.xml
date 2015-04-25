@@ -10,7 +10,7 @@
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#E8EFF7"/>
+        android:background="@color/main_grey_background"/>
 
     <ImageView
         android:layout_width="350dp"

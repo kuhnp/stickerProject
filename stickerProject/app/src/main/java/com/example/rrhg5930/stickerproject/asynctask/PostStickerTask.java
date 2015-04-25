@@ -61,7 +61,7 @@ public class PostStickerTask extends AsyncTask<URL, Integer, Long> {
         }
         else{
             ((MainActivity)context).setPosition(this.position);
-            ((MainActivity)context).updateFriendFragmentafterPost();
+            ((MainActivity)context).updateFriendFragmentAfterPost();
         }
     }
 }

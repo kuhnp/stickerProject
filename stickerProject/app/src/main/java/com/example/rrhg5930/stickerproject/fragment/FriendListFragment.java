@@ -28,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.rrhg5930.stickerproject.MainActivity;
 import com.example.rrhg5930.stickerproject.StickerConfig;
@@ -194,8 +195,13 @@ public class FriendListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String friendName = addFriendEditText.getText().toString();
-                AddFriendTask addFriendTask = new AddFriendTask(application,sharedPreferences,application.getApplicationContext(),friendName);
-                addFriendTask.execute();
+                if(!friendName.isEmpty()) {
+                    AddFriendTask addFriendTask = new AddFriendTask(application, sharedPreferences, application.getApplicationContext(), friendName);
+                    addFriendTask.execute();
+                }
+                else{
+                    Toast.makeText(context,"You must enter a friend name", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         return rootView;
