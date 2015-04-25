@@ -42,6 +42,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView mTextView;
+        public Button mButtonChoosePicture;
         public Button mButtonPost;
         public Button mButtonCancel;
         public ImageView mImageView;
@@ -54,9 +55,10 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
             v1 = itemView.findViewById(R.id.card_view);
             mImageView = (ImageView)v1.findViewById(R.id.friendListIV);
             mTextView = (TextView)v1.findViewById(R.id.friendStickerNameTV);
-            mButtonPost = (Button)v1.findViewById(R.id.add_btn);
-            mButtonCancel = (Button)v1.findViewById(R.id.cancel_btn);
-            mImageView.setOnClickListener(new View.OnClickListener() {
+            mButtonPost = (Button)v1.findViewById(R.id.sendB);
+            mButtonCancel = (Button)v1.findViewById(R.id.cancelB);
+            mButtonChoosePicture = (Button) v1.findViewById(R.id.newPostB);
+            mButtonChoosePicture.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.d("FriendAdapter", "selected:"+mTextView.getText());
@@ -121,8 +123,8 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
                 holder.setPosition(cursor.getPosition());
                 holder.mTextView = (TextView) view.findViewById(R.id.friendStickerNameTV);
                 holder.mImageView = (ImageView) view.findViewById(R.id.friendListIV);
-                holder.mButtonPost = (Button) view.findViewById(R.id.add_btn);
-                holder.mButtonCancel = (Button) view.findViewById(R.id.cancel_btn);
+                holder.mButtonPost = (Button) view.findViewById(R.id.sendB);
+                holder.mButtonCancel = (Button) view.findViewById(R.id.cancelB);
                 String name = cursor.getString(cursor.getColumnIndex("name"));
                 holder.mTextView.setText(Html.fromHtml(name));
                 holder.mButtonPost.setVisibility(View.GONE);
@@ -147,6 +149,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         cursorAdapter.bindView(holder.itemView, context, cursor);
 
     }
+
 
     @Override
     public int getItemCount() {

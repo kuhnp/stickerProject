@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -206,13 +207,20 @@ public class FriendListFragment extends Fragment {
 
     public void updateFragment(int position, Uri uri){
         View v = this.friendListRecyclerView.getChildAt(position);
+        CardView cardView = (CardView) v.findViewById(R.id.card_view);
+        Resources r = context.getResources();
         ImageView iv = (ImageView) v.findViewById(R.id.friendListIV);
-        Button btn = (Button) v.findViewById(R.id.add_btn);
-        Button btn2 = (Button) v.findViewById(R.id.cancel_btn);
+        Button btn = (Button) v.findViewById(R.id.sendB);
+        Button btn2 = (Button) v.findViewById(R.id.cancelB);
         TextView tv = (TextView) v.findViewById(R.id.friendStickerNameTV);
         iv.setImageURI(uri);
 
-        Resources r = context.getResources();
+        ViewGroup.LayoutParams layoutParams = cardView.getLayoutParams();
+        int newCardSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,508,r.getDisplayMetrics());
+        layoutParams.height = newCardSize;
+        cardView.setLayoutParams(layoutParams);
+
+
         int marginDpx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,20,r.getDisplayMetrics());
         int px2 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,80,r.getDisplayMetrics());
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -233,8 +241,8 @@ public class FriendListFragment extends Fragment {
         View v = this.friendListRecyclerView.getChildAt(position);
         ImageView iv = (ImageView) v.findViewById(R.id.friendListIV);
         TextView tv = (TextView) v.findViewById(R.id.friendStickerNameTV);
-        Button btn = (Button) v.findViewById(R.id.add_btn);
-        Button btn2 = (Button) v.findViewById(R.id.cancel_btn);
+        Button btn = (Button) v.findViewById(R.id.sendB);
+        Button btn2 = (Button) v.findViewById(R.id.cancelB);
         String name = tv.getText().toString();
         ImageLoader imageLoader = ImageLoader.getInstance();
         imageLoader.cancelDisplayTask(iv);
