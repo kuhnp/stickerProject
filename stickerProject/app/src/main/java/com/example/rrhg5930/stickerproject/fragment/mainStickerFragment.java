@@ -1,22 +1,16 @@
 package com.example.rrhg5930.stickerproject.fragment;
 
 import android.app.AlertDialog;
-import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.DialogPreference;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -46,8 +40,8 @@ public class MainStickerFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.main_sticker_layout, container, false);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-        TextView textView = (TextView) rootView.findViewById(R.id.usernameTV);
-        textView.setText(sharedPreferences.getString("username",""));
+        TextView textView = (TextView) rootView.findViewById(R.id.mainStickerUsernameTV);
+        textView.setText("@"+sharedPreferences.getString("username",""));
         logoutB = (Button) rootView.findViewById(R.id.logout_button);
         final ImageView imageView = (ImageView) rootView.findViewById(R.id.mainStickerIV);
         if(!sharedPreferences.getString("imagePath", "").isEmpty())

@@ -9,56 +9,90 @@
         android:id="@+id/card_view"
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_marginTop="30dp"
+        android:layout_height="420dp"
+        android:layout_marginTop="10dp"
         card_view:cardCornerRadius="4dp"
         card_view:cardElevation="4dp"
         card_view:cardUseCompatPadding="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/mainStickerIV"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:src="@drawable/image_fun"/>
+
+            <TextView
+                android:id="@+id/stickerMessageMainTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="What a beautiful landscape!"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/mainStickerIV"
+                android:layout_marginTop="20dp"
+                android:textSize="20sp"
+                android:textStyle="italic"
+                android:textColor="@color/text_grey"
+                />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
-                android:layout_alignParentBottom="true">
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp">
 
                 <TextView
+                    android:id="@+id/mainStickerUsernameTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/usernameTV"
-                    android:textColor="#ff525252"
+                    android:textColor="@color/text_grey_2"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:text="Nom"
-                    android:textSize="30dp"
+                    android:text="\@Nom"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/repostB"
+                    android:layout_width="30dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/forward"
+                    android:layout_toLeftOf="@+id/mainStickerUsernameTV"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="60dp"/>
+
+                <Button
+                    android:id="@+id/likeMainB"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/coeur"
+                    android:layout_toRightOf="@+id/mainStickerUsernameTV"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="60dp"
                     />
+
+                <TextView
+                    android:id="@+id/timeMainTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/mainStickerUsernameTV"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:text="6 min"
+                    android:textColor="@color/text_grey_2"
+                    android:textSize="15sp"
+                    />
+
 
             </RelativeLayout>
-
-            <FrameLayout
-                android:layout_width="fill_parent"
-                android:layout_height="300dp"
-                android:layout_alignParentRight="true"
-                android:id="@+id/frameIV">
-
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginLeft="15dp"
-                    android:scaleType="centerCrop"
-                    android:id="@+id/mainStickerIV"
-                    android:layout_centerHorizontal="true"
-                    android:adjustViewBounds="true"
-                    android:src="@drawable/image_fun"
-                    />
-
-            </FrameLayout>
 
         </RelativeLayout>
 
@@ -68,7 +102,7 @@
     <Button
         android:id="@+id/logout_button"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="40dp"
         android:background="@drawable/logout_button"
         android:layout_alignParentBottom="true"
         android:textColor="#ffffff"

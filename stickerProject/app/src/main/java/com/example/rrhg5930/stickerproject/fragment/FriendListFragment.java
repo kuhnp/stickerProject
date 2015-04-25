@@ -1,13 +1,11 @@
 package com.example.rrhg5930.stickerproject.fragment;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,7 +27,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.rrhg5930.stickerproject.MainActivity;
 import com.example.rrhg5930.stickerproject.StickerConfig;
 import com.example.rrhg5930.stickerproject.adapter.FriendAdapter;
 import com.example.rrhg5930.stickerproject.R;
@@ -40,7 +36,6 @@ import com.example.rrhg5930.stickerproject.asynctask.AddFriendTask;
 import com.example.rrhg5930.stickerproject.database.StickerContentProvider;
 import com.example.rrhg5930.stickerproject.model.User;
 import com.example.rrhg5930.stickerproject.observer.StickerContentObserver;
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -214,7 +209,7 @@ public class FriendListFragment extends Fragment {
         ImageView iv = (ImageView) v.findViewById(R.id.friendListIV);
         Button btn = (Button) v.findViewById(R.id.add_btn);
         Button btn2 = (Button) v.findViewById(R.id.cancel_btn);
-        TextView tv = (TextView) v.findViewById(R.id.list_item_string);
+        TextView tv = (TextView) v.findViewById(R.id.friendStickerNameTV);
         iv.setImageURI(uri);
 
         Resources r = context.getResources();
@@ -237,7 +232,7 @@ public class FriendListFragment extends Fragment {
     public void updateFragmentAfterPost(int position) {
         View v = this.friendListRecyclerView.getChildAt(position);
         ImageView iv = (ImageView) v.findViewById(R.id.friendListIV);
-        TextView tv = (TextView) v.findViewById(R.id.list_item_string);
+        TextView tv = (TextView) v.findViewById(R.id.friendStickerNameTV);
         Button btn = (Button) v.findViewById(R.id.add_btn);
         Button btn2 = (Button) v.findViewById(R.id.cancel_btn);
         String name = tv.getText().toString();

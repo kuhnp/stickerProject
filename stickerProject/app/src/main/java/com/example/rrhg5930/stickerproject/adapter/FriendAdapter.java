@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
@@ -24,10 +23,7 @@ import com.example.rrhg5930.stickerproject.R;
 import com.example.rrhg5930.stickerproject.StickerApp;
 import com.example.rrhg5930.stickerproject.StickerConfig;
 import com.example.rrhg5930.stickerproject.asynctask.PostStickerTask;
-import com.example.rrhg5930.stickerproject.util.StickerUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import java.util.ArrayList;
 
 /**
  * Created by pierre on 18/03/2015.
@@ -57,7 +53,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
             super(v);
             v1 = itemView.findViewById(R.id.card_view);
             mImageView = (ImageView)v1.findViewById(R.id.friendListIV);
-            mTextView = (TextView)v1.findViewById(R.id.list_item_string);
+            mTextView = (TextView)v1.findViewById(R.id.friendStickerNameTV);
             mButtonPost = (Button)v1.findViewById(R.id.add_btn);
             mButtonCancel = (Button)v1.findViewById(R.id.cancel_btn);
             mImageView.setOnClickListener(new View.OnClickListener() {
@@ -123,7 +119,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
                     holder = new ViewHolder(view);
 
                 holder.setPosition(cursor.getPosition());
-                holder.mTextView = (TextView) view.findViewById(R.id.list_item_string);
+                holder.mTextView = (TextView) view.findViewById(R.id.friendStickerNameTV);
                 holder.mImageView = (ImageView) view.findViewById(R.id.friendListIV);
                 holder.mButtonPost = (Button) view.findViewById(R.id.add_btn);
                 holder.mButtonCancel = (Button) view.findViewById(R.id.cancel_btn);

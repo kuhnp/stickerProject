@@ -12,7 +12,7 @@
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:background="@color/tab_color"
-        android:layout_height="340dp"
+        android:layout_height="420dp"
         card_view:cardCornerRadius="4dp"
         card_view:cardElevation="3dp"
         card_view:cardUseCompatPadding="true">
@@ -21,25 +21,91 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <TextView
+                android:id="@+id/friendStickerNameTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="10dp"
+                android:text="Username"
+                android:textColor="@color/text_grey"
+                android:textSize="25sp"/>
+
+            <ImageView
+                android:id="@+id/friendListIV"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:layout_below="@id/friendStickerNameTV"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:src="@drawable/image_fun"/>
+
+            <TextView
+                android:id="@+id/stickerMessageTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="What a beautiful landscape!"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/friendListIV"
+                android:layout_marginTop="16dp"
+                android:textSize="20sp"
+                android:textStyle="italic"
+                android:textColor="@color/text_grey"
+                />
+
+
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="90dp"
                 android:layout_alignParentBottom="true">
 
                 <TextView
-                    android:id="@+id/list_item_string"
-                    android:layout_width="150dp"
+                    android:id="@+id/friendStickerNameFrom"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginRight="5dp"
-                    android:textColor="#ff525252"
-                    android:textSize="18dp"
-                    android:textStyle="bold"
-                    android:gravity="center"
                     android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:text="\@username"
+                    android:textSize="20sp"
+                    android:textColor="@color/text_grey_2"
+                    />
+                <Button
+                    android:id="@+id/newPostB"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@id/friendStickerNameFrom"
+                    android:layout_marginRight="50dp"
+                    android:background="@drawable/post"/>
+
+                <Button
+                    android:id="@+id/likeB"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/friendStickerNameFrom"
+                    android:layout_marginLeft="50dp"
+                    android:background="@drawable/coeur"
+                    />
+
+                <TextView
+                    android:id="@+id/timeTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/friendStickerNameFrom"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:text="6 min"
+                    android:textColor="@color/text_grey_2"
+                    android:textSize="15sp"
                     />
 
                 <Button
+                    android:visibility="gone"
                     android:id="@+id/add_btn"
                     android:layout_width="60dp"
                     android:layout_height="45dp"
@@ -48,10 +114,10 @@
                     android:layout_marginRight="15dp"
                     android:background="@drawable/button_post2"
                     android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    />
+                    android:focusableInTouchMode="false"/>
 
                 <Button
+                    android:visibility="gone"
                     android:id="@+id/cancel_btn"
                     android:layout_width="60dp"
                     android:layout_height="45dp"
@@ -63,25 +129,6 @@
                     android:focusableInTouchMode="false"/>
 
             </RelativeLayout>
-
-
-            <FrameLayout
-                android:layout_width="fill_parent"
-                android:layout_height="250dp"
-                android:layout_alignParentRight="true"
-                android:id="@+id/frameIV">
-                <ImageView
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_gravity="center"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/image_fun"
-                    android:id="@+id/friendListIV"/>
-
-            </FrameLayout>
 
         </RelativeLayout>
 
