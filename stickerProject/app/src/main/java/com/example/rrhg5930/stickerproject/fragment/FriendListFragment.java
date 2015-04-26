@@ -205,14 +205,13 @@ public class FriendListFragment extends Fragment {
     }
 
 
-    public void updateFragment(int position, Uri uri){
+    public void updateFragmentBeforePost(int position, Uri uri){
         View v = this.friendListRecyclerView.getChildAt(position);
         CardView cardView = (CardView) v.findViewById(R.id.card_view);
         Resources r = context.getResources();
         ImageView iv = (ImageView) v.findViewById(R.id.friendListIV);
         Button btn = (Button) v.findViewById(R.id.sendB);
         Button btn2 = (Button) v.findViewById(R.id.cancelB);
-        TextView tv = (TextView) v.findViewById(R.id.friendStickerNameTV);
         iv.setImageURI(uri);
 
         ViewGroup.LayoutParams layoutParams = cardView.getLayoutParams();
@@ -220,21 +219,8 @@ public class FriendListFragment extends Fragment {
         layoutParams.height = newCardSize;
         cardView.setLayoutParams(layoutParams);
 
-
-        int marginDpx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,20,r.getDisplayMetrics());
-        int px2 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,80,r.getDisplayMetrics());
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        //params.setMargins(0,0,0,0);
-        params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        params.setMargins(marginDpx,15,0,0);
-        tv.setLayoutParams(params);
-        //TranslateAnimation ta = new TranslateAnimation(0,0,100,0);
-        //ta.setDuration(3000);
-        //tv.startAnimation(ta);
         btn.setVisibility(View.VISIBLE);
         btn2.setVisibility(View.VISIBLE);
-
     }
 
     public void updateFragmentAfterPost(int position) {
@@ -244,17 +230,16 @@ public class FriendListFragment extends Fragment {
         Button btn = (Button) v.findViewById(R.id.sendB);
         Button btn2 = (Button) v.findViewById(R.id.cancelB);
         String name = tv.getText().toString();
+        CardView cardView = (CardView) v.findViewById(R.id.card_view);
+        Resources r = context.getResources();
         ImageLoader imageLoader = ImageLoader.getInstance();
         imageLoader.cancelDisplayTask(iv);
         imageLoader.displayImage(StickerConfig.PARAM_URL + "/sticker/" + name, iv);
 
-        Resources r = context.getResources();
-        int marginDpx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,20,r.getDisplayMetrics());
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.CENTER_VERTICAL);
-        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        params.setMargins(marginDpx,0,0,0);
-        tv.setLayoutParams(params);
+        ViewGroup.LayoutParams layoutParams = cardView.getLayoutParams();
+        int newCardSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,420,r.getDisplayMetrics());
+        layoutParams.height = newCardSize;
+        cardView.setLayoutParams(layoutParams);
 
         btn.setVisibility(View.GONE);
         btn2.setVisibility(View.GONE);

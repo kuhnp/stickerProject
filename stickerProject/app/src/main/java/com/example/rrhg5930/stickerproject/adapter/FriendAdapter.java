@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +51,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         public ImageView mImageView;
         public View v1;
         int position;
+        private ImageLoader imageLoader = ImageLoader.getInstance();
 
 
         public ViewHolder(View v) {
@@ -71,6 +75,21 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
                     PostStickerTask postStickerTask = new PostStickerTask(mTextView.getText().toString(), MainActivity.mImagePath,
                             (StickerApp)v.getContext().getApplicationContext(), PreferenceManager.getDefaultSharedPreferences(v.getContext()), v.getContext(), position);
                     postStickerTask.execute();
+                }
+            });
+
+            mButtonCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Resources r = v.getContext().getResources();
+                    CardView cardView = (CardView) v1.findViewById(R.id.card_view);
+                    ViewGroup.LayoutParams layoutParams = cardView.getLayoutParams();
+                    int newCardSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 420, r.getDisplayMetrics());
+                    layoutParams.height = newCardSize;
+                    cardView.setLayoutParams(layoutParams);
+                    mButtonPost.setVisibility(View.GONE);
+                    mButtonCancel.setVisibility(View.GONE);
+                    imageLoader.displayImage(StickerConfig.PARAM_URL + "/sticker/" + mTextView.getText().toString(), mImageView);
                 }
             });
         }

@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -20,14 +19,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 
-import com.example.rrhg5930.stickerproject.adapter.FriendAdapter;
 import com.example.rrhg5930.stickerproject.adapter.TabsPagerAdapter;
 import com.example.rrhg5930.stickerproject.fragment.FriendListFragment;
 import com.example.rrhg5930.stickerproject.fragment.MainStickerFragment;
@@ -35,7 +28,6 @@ import com.example.rrhg5930.stickerproject.util.StickerUtil;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -260,9 +252,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     @Override
     public void onArticleSelected(int position) {
         //FriendListFragment friendListFragment = (FriendListFragment) getSupportFragmentManager().findFragmentById(R.id.friendListIV);
-        //friendListFragment.updateFragment(position,Uri.parse(mImagePath));
+        //friendListFragment.updateFragmentBeforePost(position,Uri.parse(mImagePath));
 
-        mFriendFrag.updateFragment(position, Uri.parse(mImagePath));
+        mFriendFrag.updateFragmentBeforePost(position, Uri.parse(mImagePath));
     }
 
     public class GetFriendTask extends AsyncTask<URL, Integer, Long> {
