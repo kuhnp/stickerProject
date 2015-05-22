@@ -119,13 +119,14 @@ public class FriendListFragment extends Fragment {
 
         // Set the recyclerView with the list of friends
         friendListRecyclerView = (RecyclerView) rootView.findViewById(R.id.friendRV);
-        friendListRecyclerView.setHasFixedSize(true);
 
         friendListLayoutManager = new LinearLayoutManager(getActivity());
+
         friendListRecyclerView.setLayoutManager(friendListLayoutManager);
 
         // Query db for friends
         c = findFriendinDb();
+        int length = c.getCount();
         friendListAdapter = new FriendAdapter(false, application, sharedPreferences, context, c);
         friendListRecyclerView.setAdapter(friendListAdapter);
 
@@ -145,7 +146,6 @@ public class FriendListFragment extends Fragment {
 
         // Set the second recyclerView, with the list of pending friends.
         pendindFriendListRecyclerView = (RecyclerView) rootView.findViewById(R.id.friendRV2);
-        pendindFriendListRecyclerView.setHasFixedSize(true);
 
         pendingFriendListLayoutManager = new LinearLayoutManager(getActivity());
         pendindFriendListRecyclerView.setLayoutManager(pendingFriendListLayoutManager);
@@ -206,43 +206,51 @@ public class FriendListFragment extends Fragment {
 
 
     public void updateFragmentBeforePost(int position, Uri uri){
-        View v = this.friendListRecyclerView.getChildAt(position);
-        CardView cardView = (CardView) v.findViewById(R.id.card_view);
-        Resources r = context.getResources();
-        ImageView iv = (ImageView) v.findViewById(R.id.friendListIV);
-        Button btn = (Button) v.findViewById(R.id.sendB);
-        Button btn2 = (Button) v.findViewById(R.id.cancelB);
-        iv.setImageURI(uri);
+        this.friendListRecyclerView.getAdapter().notifyDataSetChanged();
 
-        ViewGroup.LayoutParams layoutParams = cardView.getLayoutParams();
-        int newCardSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,508,r.getDisplayMetrics());
-        layoutParams.height = newCardSize;
-        cardView.setLayoutParams(layoutParams);
-
-        btn.setVisibility(View.VISIBLE);
-        btn2.setVisibility(View.VISIBLE);
+//        View v = this.friendListRecyclerView.getChildAt(position);
+//
+//        int size = this.friendListRecyclerView.getChildCount();
+//        int size2 = this.friendListRecyclerView.getAdapter().getItemCount();
+//
+//
+//        CardView cardView = (CardView) v.findViewById(R.id.card_view);
+//        Resources r = context.getResources();
+//        ImageView iv = (ImageView) v.findViewById(R.id.friendListIV);
+//        Button btn = (Button) v.findViewById(R.id.sendB);
+//        Button btn2 = (Button) v.findViewById(R.id.cancelB);
+//        iv.setImageURI(uri);
+//
+//        ViewGroup.LayoutParams layoutParams = cardView.getLayoutParams();
+//        int newCardSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,508,r.getDisplayMetrics());
+//        layoutParams.height = newCardSize;
+//        cardView.setLayoutParams(layoutParams);
+//
+//        btn.setVisibility(View.VISIBLE);
+//        btn2.setVisibility(View.VISIBLE);
     }
 
     public void updateFragmentAfterPost(int position) {
-        View v = this.friendListRecyclerView.getChildAt(position);
-        ImageView iv = (ImageView) v.findViewById(R.id.friendListIV);
-        TextView tv = (TextView) v.findViewById(R.id.friendStickerNameTV);
-        Button btn = (Button) v.findViewById(R.id.sendB);
-        Button btn2 = (Button) v.findViewById(R.id.cancelB);
-        String name = tv.getText().toString();
-        CardView cardView = (CardView) v.findViewById(R.id.card_view);
-        Resources r = context.getResources();
-        ImageLoader imageLoader = ImageLoader.getInstance();
-        imageLoader.cancelDisplayTask(iv);
-        imageLoader.displayImage(StickerConfig.PARAM_URL + "/sticker/" + name, iv);
-
-        ViewGroup.LayoutParams layoutParams = cardView.getLayoutParams();
-        int newCardSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,420,r.getDisplayMetrics());
-        layoutParams.height = newCardSize;
-        cardView.setLayoutParams(layoutParams);
-
-        btn.setVisibility(View.GONE);
-        btn2.setVisibility(View.GONE);
+        this.friendListRecyclerView.getAdapter().notifyDataSetChanged();
+//        View v = this.friendListRecyclerView.getChildAt(position);
+//        ImageView iv = (ImageView) v.findViewById(R.id.friendListIV);
+//        TextView tv = (TextView) v.findViewById(R.id.friendStickerNameTV);
+//        Button btn = (Button) v.findViewById(R.id.sendB);
+//        Button btn2 = (Button) v.findViewById(R.id.cancelB);
+//        String name = tv.getText().toString();
+//        CardView cardView = (CardView) v.findViewById(R.id.card_view);
+//        Resources r = context.getResources();
+//        ImageLoader imageLoader = ImageLoader.getInstance();
+//        imageLoader.cancelDisplayTask(iv);
+//        imageLoader.displayImage(StickerConfig.PARAM_URL + "/sticker/" + name, iv);
+//
+//        ViewGroup.LayoutParams layoutParams = cardView.getLayoutParams();
+//        int newCardSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,420,r.getDisplayMetrics());
+//        layoutParams.height = newCardSize;
+//        cardView.setLayoutParams(layoutParams);
+//
+//        btn.setVisibility(View.GONE);
+//        btn2.setVisibility(View.GONE);
     }
 
 

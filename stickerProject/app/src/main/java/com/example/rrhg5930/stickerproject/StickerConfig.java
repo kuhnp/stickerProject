@@ -8,7 +8,7 @@ import java.util.Set;
  */
 public class StickerConfig {
 
-    public final static String PARAM_URL = "http://192.168.1.9:8080";
-    public final static String SENDER_ID = "";
+    public final static String PARAM_URL = "http://10.0.1.60:8080";
+    public final static String SENDER_ID = "394358907247";
 
 }

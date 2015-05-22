@@ -11,4 +11,6 @@
     <string name="title_activity_friend">FriendActivity</string>
     <string name="title_activity_splash">SplashActivity</string>
 
+    <string name="viewHolder">viewHolder</string>
+
 </resources>

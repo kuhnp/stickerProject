@@ -6,9 +6,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -25,6 +27,10 @@ public class StickerApp extends Application{
 
     private static String TAG = "StickerApp";
 
+
+
+    private static int normalCardViewSize;
+    private static int expandedCardViewSize;
     private static final String CAMERA_PATH = "camera_path";
     private String cameraImagePath;
     SharedPreferences settings;
@@ -39,6 +45,9 @@ public class StickerApp extends Application{
         //e = settings.edit();
         super.onCreate();
         stickerRest = StickerRest.getInstance(getApplicationContext());
+        Resources r = getApplicationContext().getResources();
+        normalCardViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 420, r.getDisplayMetrics());
+        expandedCardViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 508, r.getDisplayMetrics());
     }
 
     public void setCameraPath(String cameraPath)
@@ -52,6 +61,8 @@ public class StickerApp extends Application{
         DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .extraForDownloader(headers)
                 .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .showImageOnLoading(R.drawable.abc_btn_radio_material)
                 .showImageForEmptyUri(R.drawable.image_fun)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
                 .build();
@@ -117,4 +128,12 @@ public class StickerApp extends Application{
         PreferenceManager.getDefaultSharedPreferences(this).edit().clear().commit();
     }
 
+
+    public static int getNormalCardViewSize() {
+        return normalCardViewSize;
+    }
+
+    public static int getExpandedCardViewSize() {
+        return expandedCardViewSize;
+    }
 }

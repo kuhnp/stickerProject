@@ -56,6 +56,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     String SENDER_ID = StickerConfig.SENDER_ID;
 
     public static String mImagePath;
+    public static Uri fileUri;
     //private Uri fileUri;
     public StickerApp application;
     SharedPreferences sharedPref;
@@ -254,7 +255,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         //FriendListFragment friendListFragment = (FriendListFragment) getSupportFragmentManager().findFragmentById(R.id.friendListIV);
         //friendListFragment.updateFragmentBeforePost(position,Uri.parse(mImagePath));
 
+        fileUri = Uri.parse(mImagePath);
         mFriendFrag.updateFragmentBeforePost(position, Uri.parse(mImagePath));
+
     }
 
     public class GetFriendTask extends AsyncTask<URL, Integer, Long> {

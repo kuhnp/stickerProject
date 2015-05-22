@@ -69,12 +69,13 @@ module.exports.get = function(req, res){
 module.exports.getbyid = function(req, res){
     var decode = jwt.verify(req.token,process.env.JWT_SECRET);
     var username = decode.username;
+    console.log('Image requested for '+req.params.user_id+' by '+username);
 
     if(fs.existsSync(config.localPath.uploadPath+req.params.user_id+'.jpg')){
         res.sendfile(config.localPath.uploadPath+req.params.user_id+'.jpg');
     }
     else{
-        console.log('Send default picture');
+        console.log('Send default picture for '+req.params.user_id);
         res.sendfile(config.localPath.uploadPath+'defaultimage.jpg');
     }
 }
